@@ -1,0 +1,82 @@
+/* Dracula's Cave — design tokens.
+   Single source of truth for type, colour and layout, shared by the blog
+   skin (style.css) and the site skin (site.css). The light values are the
+   blog's original values verbatim: introducing this file changed nothing
+   visually. Dark values are the games-site surfaces. */
+
+/* Nunito, self-hosted variable font (weights 200-1000 in one file) */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("nunito.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("nunito-italic.woff2") format("woff2");
+}
+/* Oswald, self-hosted variable font — display headings (newsletter title) */
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url("oswald.woff2") format("woff2");
+}
+
+:root {
+  /* type */
+  --font-body: 'Nunito', Helvetica, Arial, sans-serif;
+  --font-display: Arial, Helvetica, sans-serif;
+  --text-xs: 11px;   /* meta lines, small buttons */
+  --text-sm: 12px;   /* footer, captions, tags */
+  --text-md: 13px;   /* widgets, post nav */
+  --text-base: 14px; /* body copy */
+  --text-nav: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+
+  /* colour */
+  --bg: #efefef;
+  --surface: #fff;
+  --text: #555;
+  --heading: #000;
+  --link: #000;
+  --muted: #999;
+  --soft: #777;
+  --border: #e3e3e3;  /* surface edges */
+  --rule: #ddd;       /* dotted list rules */
+  --edge: #ccc;       /* input borders, blockquote bar */
+  --bar: #333;        /* masthead, badges, dark buttons */
+  --bar-hover: #000;
+  --on-bar: #fff;
+  --accent: #7a0f0f;  /* Dracula's Cave red — primary CTAs */
+  --accent-hover: #9a1616;
+
+  /* layout */
+  --container: 940px;
+  --container-wide: 1120px;
+}
+
+/* dark surfaces — games pages and dark prototypes */
+[data-theme="dark"] {
+  --bg: #0f0d0d;
+  --surface: #1c1919;
+  --text: #d9d5d3;
+  --heading: #fff;
+  --link: #fff;
+  --muted: #9a9491;
+  --soft: #b3aeab;
+  --border: #2b2726;
+  --rule: #353030;
+  --edge: #3a3534;
+  --bar: #191616;
+  --bar-hover: #000;
+  --on-bar: #fff;
+}

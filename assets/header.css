@@ -1,0 +1,79 @@
+/* Shared standardized header + masthead logo — used by the site pages
+   (site.html) and the blog (base.html). Self-contained apart from the
+   Nunito @font-face, which tokens.css provides on every page. */
+
+.dc-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 20px;
+  gap: 10px;
+  z-index: 999;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(247, 247, 247, 0.05); /* .cc dark-theme header */
+  border-bottom: 1px solid rgba(111, 111, 111, 0.35);
+  font-family: 'Nunito', Helvetica, Arial, sans-serif;
+}
+/* light pages (and the blog): translucent dark glass keeps white nav readable */
+body.page-light .dc-header { background: rgba(23, 32, 34, 0.92); }
+.dc-header .dc-nav { display: flex; align-items: center; gap: 24px; flex: 1; }
+.dc-header .dc-nav-right { justify-content: flex-end; }
+.dc-header .dc-logo { display: block; }
+/* layered logo: hi-res smooth-alpha text PNG + pixel-art sprite GIF overlay */
+.dc-header .logo-stack { position: relative; display: inline-block; }
+.dc-header .logo-text { height: 45px; width: auto; display: block; }
+.dc-header .logo-sprite {
+  position: absolute;
+  left: 52.553%;
+  top: 0;
+  width: 22.553%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.dc-header .dc-nav a { color: #fff; font-weight: 800; font-size: 16px; text-decoration: none; }
+/* nav link font (Universal → Header → Navigation font); default is the header's Nunito */
+.dc-header .dc-nav.nav-font-helvetica a { font-family: Helvetica, Arial, sans-serif; }
+.dc-header .dc-nav.nav-font-oswald a { font-family: 'Oswald', Arial, sans-serif; font-weight: 600; letter-spacing: 0.5px; }
+.dc-header .dc-nav.nav-font-mono a { font-family: Consolas, ui-monospace, 'SF Mono', Menlo, monospace; font-size: 15px; }
+.dc-header .dc-nav a:hover { text-decoration: underline; }
+.dc-header .dc-nav a img { height: 20px; width: auto; margin-left: 6px; vertical-align: text-bottom; display: inline-block; }
+.dc-header .dc-nav a img.ico-fox { height: 17px; position: relative; top: -2px; } /* fox artwork fills its box */
+.dc-header .dc-nav a img.ico-steam { position: relative; top: -2px; }
+
+/* big masthead logo (landing pages + blog) */
+/* bottom padding is a site-wide block option (--banner-logo-pad-bottom,
+   content/universal/block-styles.yml), default 5px */
+.banner-logo { text-align: center; padding: 5px 15px var(--banner-logo-pad-bottom, 5px); }
+.banner-logo .logo-stack { position: relative; display: block; margin: 0 auto; width: min(840px, 100%); }
+.banner-logo .logo-text { width: 100%; height: auto; display: block; }
+.banner-logo .logo-sprite {
+  position: absolute;
+  left: 52.553%;
+  top: 0;
+  width: 22.553%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+/* the blog's header scrolls with the page rather than staying fixed */
+body.page-blog .dc-header { position: static; }
+
+/* mobile: one menu row on top, then a big nearly-full-width logo below it.
+   The stacked header would blanket the screen if fixed, so it scrolls with
+   the page — except on home, whose slim menu row stays fixed. */
+@media (max-width: 767px) {
+  .dc-header { flex-wrap: wrap; justify-content: center; row-gap: 4px; padding: 8px 12px 10px; min-height: 0; position: static; }
+  body.page-home .dc-header { position: fixed; top: 0; left: 0; right: 0; }
+  .dc-header .dc-nav { flex: none; order: 1; gap: 14px; }
+  .dc-header .dc-nav a { font-size: 14px; }
+  .dc-header .dc-nav a img { height: 16px; width: auto; margin-left: 4px; }
+  .dc-header .dc-nav a img.ico-fox { height: 13px; }
+  .dc-header .dc-logo { order: 2; flex-basis: 100%; display: flex; justify-content: center; padding: 4px 4px 6px; }
+  .dc-header .logo-stack { width: 94%; max-width: 420px; }
+  .dc-header .logo-text { height: auto; width: 100%; }
+  body.page-home .dc-logo { display: none; }
+  body.page-home .mobile-logo-section { padding-top: 48px; }
+  /* pages with a banner-logo masthead: it IS the big logo — no header copy */
+  body.has-banner-logo .dc-header .dc-logo { display: none; }
+}

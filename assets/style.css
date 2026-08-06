@@ -1,0 +1,296 @@
+/* Dracula's Cave — recreation of the WordPress "Skeptical" look.
+   All shared values come from tokens.css; the rendered result is unchanged. */
+
+@import "tokens.css";
+
+/* the blog keeps its original Helvetica body text; Nunito is the face of
+   the site pages (home, games, software) only */
+:root { --font-body: Helvetica, Arial, sans-serif; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background-color: var(--bg); /* matches the banner GIF background exactly */
+  color: var(--text);
+  font: 14px/1.6 var(--font-body);
+}
+
+a:link, a:visited { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { max-width: var(--container); margin: 0 auto; padding: 0 15px; }
+
+/* ---------- header ---------- */
+/* dark sliver at the very top holds only the nav; the page background
+   starts right after it and runs either side of the banner GIF */
+#masthead {
+  background: var(--bar) linear-gradient(180deg, #3a3a3a, #2d2d2d);
+  border-bottom: 2px solid #222;
+}
+
+#navigation { display: flex; justify-content: space-between; flex-wrap: wrap; }
+#navigation ul { list-style: none; display: flex; flex-wrap: wrap; }
+#navigation li a {
+  color: var(--on-bar);
+  display: block;
+  font-size: var(--text-nav);
+  font-weight: bold;
+  line-height: 42px;
+  margin-right: 20px;
+}
+#navigation .nav-rss li a { margin-right: 0; }
+
+#branding { margin: 30px auto 40px; }
+#branding img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+
+/* ---------- layout ---------- */
+.main-wrap { display: flex; gap: 40px; align-items: flex-start; }
+#content { flex: 1; min-width: 0; padding-bottom: 40px; }
+#sidebar { width: 220px; flex-shrink: 0; padding-bottom: 40px; }
+
+/* ---------- posts ---------- */
+/* each article sits in its own white box, as in the original theme */
+.post {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.post .title, .post .title a {
+  font: bold 30px/1.1 var(--font-display);
+  color: var(--heading);
+  word-wrap: break-word;
+}
+.post .title { margin: 0 0 12px; }
+.post .title a:hover { text-decoration: none; }
+h2.title, h2.title a { font-size: 24px; }
+
+.post-meta {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+/* dark meta badge that juts out to the left of the post box on wide screens.
+   Above 1200px the main wrap widens to reserve a 200px column for the badges,
+   so the whole composition (badges + posts + sidebar) stays centered. */
+.post-side { display: none; }
+@media (min-width: 1200px) {
+  .container.main-wrap { max-width: var(--container-wide); padding-left: 195px; }
+  .post { position: relative; }
+  .post-side {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 100%;
+    margin-right: 18px; /* arrow tip almost touches the box */
+    width: 165px;
+  }
+  /* badge replaces the inline meta line */
+  .post-side ~ .post-meta { display: none; }
+
+  .ps-date {
+    position: relative;
+    background: var(--bar);
+    color: var(--on-bar);
+    font: bold 17px/1 var(--font-display);
+    padding: 11px 15px 10px;
+    margin-bottom: 1px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  }
+  .ps-date::after {
+    content: "";
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    margin-top: -10px;
+    border: 10px solid transparent;
+    border-left-color: var(--bar);
+  }
+  .post-side ul { list-style: none; background: var(--bar); }
+  .post-side ul li {
+    padding: 7px 15px 8px;
+    font-size: var(--text-sm);
+    font-weight: bold;
+    color: var(--on-bar);
+    /* embossed row divider, as in the original theme */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  }
+  .post-side ul li:last-child { border-bottom: none; }
+  .post-side ul li a { color: var(--on-bar); }
+  .ps-pre { color: var(--muted); font-weight: normal; }
+}
+.post-meta a { color: var(--muted); }
+.post-meta a:hover { color: #000; }
+
+.entry { overflow-wrap: break-word; }
+.entry p, .entry ul, .entry ol, .entry blockquote, .entry figure { margin-bottom: 1.4em; }
+.entry h2, .entry h3, .entry h4 { color: var(--heading); margin: 1.6em 0 0.6em; font-family: var(--font-display); }
+.entry h2 { font-size: var(--text-xl); }
+.entry h3 { font-size: 18px; }
+.entry h4 { font-size: 15px; }
+.entry ul, .entry ol { padding-left: 1.6em; }
+.entry img { max-width: 100%; height: auto; display: block; margin: 1.4em auto; }
+.entry img.banner { width: 100%; } /* wide images always fill the column */
+.entry a { border-bottom: 1px dotted var(--muted); }
+.entry a:hover { text-decoration: none; border-bottom-style: solid; }
+.entry a:has(img) { border-bottom: none; }
+.entry blockquote {
+  border-left: 3px solid var(--edge);
+  padding-left: 15px;
+  color: var(--soft);
+  font-style: italic;
+}
+.entry figure figcaption {
+  font-size: var(--text-sm);
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  margin-top: -0.8em;
+}
+.entry iframe { max-width: 100%; }
+
+.video-embed {
+  aspect-ratio: 16 / 9;
+  margin-bottom: 1.4em;
+}
+.video-embed iframe { width: 100%; height: 100%; border: 0; }
+
+.steam-embed { margin-bottom: 1.4em; }
+.steam-embed iframe { width: 100%; max-width: 646px; height: 190px; border: 0; }
+
+.post-tags { font-size: var(--text-sm); color: var(--muted); margin-top: 20px; }
+.post-tags a { color: var(--soft); }
+
+/* prev / next — its own small white box, like the original nav-entries */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  margin-bottom: 40px;
+  font-size: var(--text-md);
+}
+.post-nav-next { text-align: right; }
+
+/* ---------- home / listing ---------- */
+.excerpt { padding-bottom: 10px; }
+.excerpt-thumb { display: block; margin: 14px 0 15px; border-bottom: none !important; }
+.excerpt-thumb img {
+  display: block;
+  width: 100%;
+  height: auto; /* natural aspect ratio — never crop, but always fill */
+}
+.read-more {
+  display: inline-block;
+  background: var(--bar);
+  color: var(--on-bar) !important;
+  font-size: var(--text-xs);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  margin: 18px 0 10px;
+}
+.read-more:hover { background: var(--bar-hover); text-decoration: none; }
+
+.archive-year { margin: 1.6em 0 0.6em; color: var(--heading); }
+.post-list { list-style: none; }
+.post-list li { padding: 6px 0; border-bottom: 1px dotted var(--rule); display: flex; gap: 15px; }
+.post-list .pl-date { color: var(--muted); font-size: var(--text-sm); white-space: nowrap; width: 85px; flex-shrink: 0; padding-top: 2px; }
+
+.pagination { display: flex; justify-content: space-between; margin-bottom: 40px; }
+
+/* ---------- sidebar ---------- */
+.widget { margin-bottom: 35px; font-size: var(--text-md); }
+
+.search-form { display: flex; gap: 6px; }
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  font: 13px var(--font-body);
+  color: var(--text);
+}
+.search-form button {
+  background: var(--bar);
+  color: var(--on-bar);
+  border: 0;
+  font: bold 11px var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 14px;
+  cursor: pointer;
+}
+.search-form button:hover { background: var(--bar-hover); }
+
+/* search results */
+.post-list li.search-hit { display: block; padding: 10px 0; }
+.search-hit a { font-weight: bold; }
+.search-hit .hit-date { color: var(--muted); font-size: var(--text-sm); margin-left: 8px; }
+.search-hit .hit-snippet { color: var(--soft); font-size: var(--text-md); margin: 4px 0 0; }
+.search-hit mark { background: #ffe9a8; padding: 0 1px; }
+.widget h3 {
+  font: bold 18px var(--font-display);
+  color: var(--heading);
+  text-transform: uppercase;
+  /* embossed divider, replicating the theme's indentline.png */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 0 0 15px;
+  margin: 0 0 10px;
+}
+.widget ul { list-style: none; }
+.widget ul li { padding: 4px 0; border-bottom: 1px dotted var(--rule); }
+.widget p { margin-bottom: 12px; }
+.widget img { max-width: 100%; height: auto; }
+
+/* the Lion Quest Infinity promo stack with the little Dracula */
+.lqi-promo { position: relative; left: 0; top: 0; }
+.lqi-promo img.lqi-main { max-width: 200px; height: auto; }
+.lqi-promo img.lqi-banner { position: relative; bottom: 10px; }
+.lqi-promo img.lqi-ground { position: absolute; bottom: -10px; left: 0; }
+.lqi-promo img.lqi-dracula { position: absolute; bottom: -10px; left: 150px; }
+.lqi-promo img.lqi-front { position: absolute; bottom: -10px; left: 0; }
+
+/* ---------- footer ---------- */
+#colophon {
+  background: #dedede;
+  border-top: 1px solid var(--edge);
+  border-bottom: 2px solid var(--bar);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  padding: 25px 0;
+}
+#colophon a { color: var(--soft); }
+
+/* ---------- small screens ---------- */
+@media (max-width: 760px) {
+  .main-wrap { flex-direction: column; }
+  #sidebar { width: 100%; }
+  .post .title, .post .title a { font-size: 24px; }
+}
+
+/* sidebar Archive / RSS buttons (the unified header no longer carries them) */
+.side-buttons { display: flex; gap: 8px; }
+.side-buttons a {
+  flex: 1;
+  text-align: center;
+  background: var(--bar);
+  color: var(--on-bar) !important;
+  font: bold 11px var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0;
+}
+.side-buttons a:hover { background: var(--bar-hover); text-decoration: none; }

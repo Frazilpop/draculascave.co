@@ -1,0 +1,677 @@
+/* Dracula's Cave — site skin.
+   Faithful port of the draculascave.cc look (hero, promo grid, newsletter),
+   rebuilt without Bootstrap/jQuery/slick. Values are lifted from the .cc
+   stylesheets (style.css / theme-b.css / dark-theme*.css) so the rendered
+   result matches the live .cc site. Site pages are dark; the blog keeps its
+   own stylesheet (style.css). */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #262e2f;
+  color: #ececec;
+  font: 16px/1.5 var(--font-body);
+}
+body.page-home { background: #0f0d0d; }
+
+a { color: inherit; }
+img { max-width: 100%; }
+
+/* ---------- header: shared rules live in header.css ---------- */
+/* content on non-home pages starts below the fixed bar */
+body:not(.page-home) main { padding-top: 60px; }
+@media (max-width: 767px) {
+  body:not(.page-home) main { padding-top: 0; }
+}
+
+/* ---------- hero (.cc .feature-video-container) ---------- */
+.feature-video-container { position: relative; overflow: hidden; height: 600px; }
+.feature-video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+@media (min-width: 768px) and (max-width: 1200px) {
+  .feature-video-container { height: auto; aspect-ratio: 19 / 9; }
+}
+@media (max-width: 767px) {
+  .feature-video-container { height: auto; aspect-ratio: 4 / 5; }
+  .feature-video-container video { transform: scale(1.3); transform-origin: center 80%; }
+}
+.feature-video-overlay {
+  position: absolute;
+  bottom: 0; left: 0;
+  padding: 60px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  z-index: 2;
+}
+.feature-overlay-logo { max-height: 220px; }
+.feature-overlay-logo-mobile { display: none; }
+.feature-overlay-text {
+  padding-left: 10px;
+  font-size: 1.1em;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+  margin-top: -12px;
+}
+@media (max-width: 767px) {
+  .feature-video-overlay { align-items: center; width: 100%; padding: 35px 20px; }
+  .feature-overlay-text { text-align: left; padding-left: 0; font-size: 105%; }
+  .feature-overlay-logo-desktop { display: none; }
+  .feature-overlay-logo-mobile { display: block; }
+}
+
+/* ---------- mobile-only animated logo section ---------- */
+.mobile-logo-section { display: none; background: #262e2f; border-bottom: 1px solid #6f6f6f; }
+.mobile-logo-section a { display: block; }
+.mobile-logo-section video { display: block; width: 100%; max-width: 820px; margin: 0 auto; padding: var(--mobile-logo-pad, 10px) 0; }
+@media (max-width: 767px) { .mobile-logo-section { display: block; } }
+/* .cc gives the logo 20px of breathing room once phone-sized */
+@media (max-width: 670px) { .mobile-logo-section video { padding: var(--mobile-logo-pad, 10px) 20px; } }
+
+/* ---------- buttons (.cc .home-button) ---------- */
+.home-button {
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  padding: 7px 10px;
+  font-size: 16px;
+  background: transparent;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  text-align: center;
+  color: #fff;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+.home-button:hover { background: #292739; }
+.inline-button { display: inline-block; padding: 8px 20px; margin-left: 10px; margin-right: 10px; }
+.no-decoration { text-decoration: none !important; }
+.display-inline-block { display: inline-block; }
+.inline-button-container { display: block; margin-left: auto; margin-right: auto; text-align: center; }
+
+/* ---------- text / section intros ---------- */
+.text-block {
+  padding: 0 20px;
+  max-width: 950px;
+  line-height: 1.45rem;
+  font-size: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.text-block p, .text-block ul, .text-block ol { margin-bottom: 1.4em; }
+.text-block h2 { margin: 1.6em 0 0.6em; font-size: 1.25rem; }
+.text-block h3 { margin: 1.4em 0 0.5em; font-size: 1.05rem; }
+.page-light h1, .page-light h2, .page-light h3 { color: #172022; }
+.text-block ul, .text-block ol { padding-left: 40px; } /* the reset strips the browser indent */
+.classic-hyperlink a { color: #0066cc; text-decoration: underline; font-weight: 500; }
+.classic-hyperlink a:hover, .classic-hyperlink a:focus { color: #004999; }
+.align-center-d { text-align: center; }
+.intro-bubble { color: #fff; font-weight: 800; }
+/* the intro block's text-to-line gap is one site-wide option (--intro-gap):
+   the whole 35px (was 20px here + 15px on the rule) lives on the text side,
+   and .intro-hr zeroes the shared rule's own padding */
+.text-block-intro { font-size: 110%; padding-bottom: var(--intro-gap, 35px); }
+@media (min-width: 768px) { .intro-bubble { max-width: 450px; } }
+@media (max-width: 767px) {
+  .align-center-d { text-align: left; padding-left: 30px; padding-right: 30px; }
+  .intro-bubble { text-align: center !important; }
+}
+.full-hr { border-bottom: 1px solid #8a9191; padding-top: 15px; }
+.intro-hr { padding-top: 0; }   /* gap handled by .text-block-intro, see above */
+/* homepage rhythm: tighter section intros; "Highlights" loses more up top */
+body.page-home .padding-top:has(+ .text-block-intro) { padding-top: 25px; }
+body.page-home .full-hr + .padding-top { padding-top: 25px; }
+body.page-home .software-spacer { padding-top: calc(var(--spacer-pad-top, 80px) / 2); }
+.padding-top { padding-top: 40px; }
+.padding-bottom { padding-bottom: 40px; }
+/* per-block leading spacers / paddings: amounts are site-wide block options
+   (content/universal/block-styles.yml, edited via the globe panel); every
+   var() fallback is the block's original hardcoded value */
+.page-title-pad { padding-top: var(--page-title-pad-top, 40px); }
+.intro-pad { padding-top: var(--intro-pad-top, 40px); }
+.text-pad.padding-top { padding-top: var(--text-pad-top, 40px); }
+.text-pad.padding-bottom { padding-bottom: var(--text-pad-bottom, 40px); }
+.newsletter-pad.padding-top { padding-top: var(--newsletter-pad-top, 40px); }
+.newsletter-pad.padding-bottom { padding-bottom: var(--newsletter-pad-bottom, 40px); }
+.store-buttons-pad.padding-top { padding-top: var(--store-buttons-pad-top, 40px); }
+.store-buttons-pad.padding-bottom-25 { padding-bottom: var(--store-buttons-pad-bottom, 25px); }
+.padding-top-r { padding-top: 15px; }
+@media (max-width: 767px) { .padding-top-r { padding-top: 10px; } }
+.padding-bottom-25 { padding-bottom: 25px; }
+/* the spacer block's height (--spacer-pad-top) halves on mobile and the home
+   page — the calc keeps that ratio when the site-wide option changes it */
+.software-spacer { padding-top: var(--spacer-pad-top, 80px); }
+@media (max-width: 767px) {
+  .software-spacer { padding-top: calc(var(--spacer-pad-top, 80px) / 2); }
+  /* .cc zeroed this on mobile, leaving section rules flush against the
+     first tile — keep a small gap instead */
+  .desktop-only-padding-top { padding-top: 20px !important; }
+}
+.page-title { color: #fff; font-size: 1.4rem; font-weight: 400; }
+.page-title--small { font-size: 1.15rem; }
+/* dash styling: "Name – tagline" with a bold name and a lighter tagline */
+.page-title .pt-lead { font-weight: 700; }
+.page-title .pt-tail--medium { font-weight: 500; }
+.page-title .pt-tail--light { font-weight: 200; }
+.page-title--large { font-size: 1.8rem; }
+.page-title--extra-large { font-size: 2.3rem; }
+/* Per-page body font (page settings → Font). Scoped to main so the header
+   and footer keep the site default; overriding the tokens catches both
+   var() users and plain inheritance. */
+body.font-helvetica main {
+  --font-body: Helvetica, Arial, sans-serif;
+  --font-display: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+body.font-mono main {
+  /* CLInt renders in Consolas (CLInt.ps1 sets FaceName = 'Consolas') — lead
+     with it; Apple systems without it fall back to their nearest mono.
+     Consolas runs optically larger than Nunito, so pull the base size back */
+  --font-body: Consolas, ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: Consolas, ui-monospace, 'SF Mono', Menlo, monospace;
+  font-family: var(--font-body);
+  font-size: 90%;
+}
+/* "brand" gradient page themes: the screenshots tool's background — vertical
+   near-black gradient, cyan glow upper-right, magenta lower-left. Painted on
+   a fixed ::before (not background-attachment: fixed, broken on iOS) so the
+   glows stay pinned to the viewport while the page scrolls; the body colour
+   is the fallback under overscroll. */
+body.page-brand { background: #08080c; }
+body.page-brand-dark { background: #030306; }
+body.page-brand::before, body.page-brand-dark::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+body.page-brand::before {
+  background:
+    radial-gradient(circle at 85% 22%, rgba(110, 239, 255, .16), transparent 55%),
+    radial-gradient(circle at 12% 70%, rgba(240, 110, 240, .13), transparent 55%),
+    linear-gradient(180deg, #161620, #08080c);
+}
+body.page-brand-dark::before {
+  background:
+    radial-gradient(circle at 85% 22%, rgba(110, 239, 255, .11), transparent 55%),
+    radial-gradient(circle at 12% 70%, rgba(240, 110, 240, .09), transparent 55%),
+    linear-gradient(180deg, #0d0d14, #030306);
+}
+/* optional lighter line under the page title */
+.text-block .page-subtitle { color: #bbb; font-size: 1rem; font-weight: 200; margin: var(--page-title-sub-gap, 0.5em) 0 1em; }
+/* subheading block: the page-title treatment at section scale (h3).
+   colour is class-only specificity so .page-light h3 still wins on light pages;
+   top padding is a site-wide block option like the page title's */
+.subheading { color: #fff; }
+.text-block h3.subheading { margin: 0.7em 0; font-size: 1.15rem; font-weight: 400; }
+.subheading-pad { padding-top: var(--subheading-pad-top, 40px); }
+
+/* masthead banner-logo: shared rules live in header.css */
+
+/* ---------- promo grid (.cc homepage tiles) ---------- */
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  padding: 0 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 1200px) { .promo-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 920px) { .promo-grid { grid-template-columns: 1fr; } }
+.padded-container { padding: 0 15px; }
+.promo-grid .padded-container { padding: 0; display: flex; }
+/* partial-row option A: a dashed outline where the next tile will live */
+.promo-soon {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(136, 136, 136, .55);
+  border-radius: 4px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  min-height: 180px;
+}
+/* single column: there is no empty slot to point at */
+@media (max-width: 920px) { .promo-soon-wrap { display: none; } }
+/* partial-row option B: same tile widths, but an unfilled row centers */
+.promo-grid--center { display: flex; flex-wrap: wrap; justify-content: center; }
+.promo-grid--center > .padded-container { width: calc((100% - 50px) / 3); }
+@media (max-width: 1200px) { .promo-grid--center > .padded-container { width: calc((100% - 25px) / 2); } }
+@media (max-width: 920px) { .promo-grid--center > .padded-container { width: 100%; } }
+.center-image { margin-left: auto; margin-right: auto; display: block; }
+.feature-image-960 {
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #303030;
+}
+.feature-image-960 img { width: 100%; }
+.drop-shadow { box-shadow: 5px 5px 8px 0 rgba(22, 22, 22, 0.25), 0 6px 20px 0 rgba(22, 22, 22, 0.19); }
+.grid-name {
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  flex: 1;
+}
+.software-promo { padding-left: 30px; padding-right: 30px; }
+@media (min-width: 1201px) { .software-promo { padding-left: 40px; padding-right: 40px; } }
+@media (max-width: 767px) {
+  .software-promo { padding-left: 20px; padding-right: 20px; }
+  .grid-name { text-align: left; }
+}
+.post-grid-date { color: #9a9491; font-size: 0.85rem; }
+/* promo-grid stacked mode: the blurb sits under the title with some air */
+.promo-blurb { display: inline-block; margin-top: 10px; }
+
+/* hover-to-play preview video */
+.promo-video-hover { position: relative; display: block; overflow: hidden; }
+.promo-video-hover video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.promo-video-hover:hover video, .promo-video-hover.playing video { opacity: 1; }
+.promo-video-hover img { display: block; width: 100%; }
+/* per-tile "coming soon" corner badge over the image */
+.promo-soon-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background: rgba(139, 0, 0, .9);
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 1px;
+  color: #fff;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+/* ---------- newsletter (.cc signup box) ---------- */
+.outline-sign-up-box {
+  border: 2px solid #fff;
+  border-radius: 25px;
+  padding: 30px 45px 5px;
+}
+@media (min-width: 860px) { .outline-sign-up-box { padding-left: 160px; padding-right: 160px; } }
+@media (max-width: 767px) { .outline-sign-up-box { padding-left: 30px !important; padding-right: 30px !important; } }
+/* mobile: match the box's outer edges to the promo tiles (.promo-grid is 15px,
+   but the .align-center-d mobile rule would pad the wrapper to 30px) */
+@media (max-width: 767px) { .newsletter-pad.align-center-d { padding-left: 15px; padding-right: 15px; } }
+.newsletter-title-b { font-family: 'Oswald', var(--font-display); font-size: 250%; margin-bottom: 30px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+@media (max-width: 767px) { .newsletter-title-b { font-size: 180%; } }
+@media (max-width: 480px) { .newsletter-title-b { margin-bottom: 20px; } }
+.newsletter-sub-title { font-weight: 300; margin-bottom: 25px; line-height: 1.3; text-align: left; }
+.sign-up-box {
+  display: inline-block;
+  padding: 0 8px;
+  margin-bottom: 17px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: none;
+  min-width: 480px;
+  max-width: 635px;
+  min-height: 36px;
+  color: #000;
+  background: #fff;
+  font: 16px var(--font-body);
+}
+@media (max-width: 767px) { .sign-up-box { min-width: 100%; max-width: 100%; } }
+.mc-button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 25px; /* the .cc source box only had 5px under the button — deliberate fix */
+  display: block;
+  padding: 7px 10px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  background: #715f95;
+  color: #fff;
+  width: 480px;
+  max-width: 100%;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+/* hover darkens the page's own button colour (--mc) by a fixed ratio —
+   #715f95 lands on the old hardcoded #503e73, so default pages look unchanged */
+.mc-button:hover { background: color-mix(in srgb, var(--mc, #715f95) 71%, black); }
+.nl-hp { position: absolute; left: -5000px; }
+
+/* ---------- footer: shared rules live in footer.css ---------- */
+.dc-footer { font: inherit; }
+.copywright {
+  background: #262e2f;
+  padding: 15px 10px;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 200;
+  font-size: 100%;
+}
+
+/* ---------- game pages ---------- */
+.feature-logo-medium { max-width: 550px; padding-bottom: 30px; }
+.feature-logo-large { max-width: 760px; padding-bottom: 30px; }
+.feature-logo-extra-large { max-width: 1100px; padding-bottom: 30px; }
+.logo-padding { padding-top: 30px; }
+/* the logo BLOCK's copy only (.logo-padding is shared with overlay-banner) */
+.logo-pad { padding-top: var(--logo-pad-top, 30px); }
+@media (max-width: 767px) {
+  .feature-logo-medium, .feature-logo-large, .feature-logo-extra-large { padding-left: 20px; padding-right: 20px; padding-bottom: 15px; }
+}
+/* Merriweather Sans, self-hosted — used by inline logo SVGs (CAPITALISM);
+   browsers only download it on pages that actually use the family */
+@font-face {
+  font-family: 'Merriweather Sans';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url("merriweather-sans.woff2") format("woff2");
+}
+.svg-inline svg { width: 100%; height: auto; display: block; }
+
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+@media (max-width: 767px) {
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+}
+.video-banner { width: 100%; display: block; }
+/* full-bleed decorative strip (.cc Animal Maker bg-block-row) */
+.block-background { padding-bottom: 30px; overflow: hidden; }
+.block-background-image { display: block; width: 100%; height: auto; object-fit: cover; object-position: left center; }
+/* logo-over-banner composition (.cc LQi top section) */
+.overlay-banner { position: relative; overflow: hidden; background: #111114; }
+.overlay-banner .ob-media { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; }
+.overlay-banner .ob-media video, .overlay-banner .ob-media img { width: 100%; height: 100%; object-fit: cover; }
+.overlay-banner .SVG-logo { position: relative; z-index: 1; }
+.ob-spacer { width: 100%; padding-top: 30%; }
+@media (max-width: 960px) { .ob-spacer { padding-top: 20%; } }
+@media (min-width: 1900px) { .ob-spacer { padding-top: 27%; } }
+.image-block { padding: var(--image-pad, 10px) 0; }
+.image-block img { max-width: 100%; height: auto; }
+.image-row { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; padding: var(--image-row-pad, 20px) 15px; }
+.image-row img { max-width: 100%; height: auto; }
+.image-row img.bordered { border: 2px solid #fff; }
+.article-set-title { font-size: 115%; font-weight: 400; line-height: 1.1; color: #fff; }
+.padding-15 { padding: 0 15px; }
+@media (max-width: 767px) {
+  .padding-15 { padding-left: 20px; padding-right: 20px; }
+  .article-set-title { font-size: 1rem; }
+}
+
+/* screenshot carousel (.cc slick-slider-single port): 4/3/2/1 thumbnails */
+.article-slider { position: relative; }
+.slider-viewport { overflow: hidden; }
+.slider-track { display: flex; transition: transform 0.4s ease; }
+.article-slider-item { flex: 0 0 25%; min-width: 0; padding: 0 15px; } /* .cc: 30px between thumbnails */
+@media (max-width: 1200px) { .article-slider-item { flex-basis: 33.3333%; } }
+@media (max-width: 767px) { .article-slider-item { flex-basis: 50%; } }
+@media (max-width: 540px) { .article-slider-item { flex-basis: 100%; } }
+.grid-article-outline { border: 1px solid #8a9191; margin: 40px 0 30px; }
+.grid-article-outline:hover { box-shadow: 0 0 20px 5px rgba(119, 118, 118, 0.25); }
+.gridImage { max-width: 100%; margin: 0 auto; display: block; }
+.gridImage img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+.slider-prev, .slider-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  background: transparent no-repeat center / contain;
+  cursor: pointer;
+  z-index: 1;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+}
+.slider-next { right: 15px; background-image: url("slider-arrow-next.svg"); }
+.slider-next:hover { background-image: url("slider-arrow-next-h.svg"); }
+.slider-prev { left: 15px; background-image: url("slider-arrow-prev.svg"); }
+.slider-prev:hover { background-image: url("slider-arrow-prev-h.svg"); }
+.slider-prev[hidden] { display: none; }
+/* dark arrows on light pages — the .cc light-grey circles vanish on #e6e6e6 */
+body.page-light .slider-next { background-image: url("slider-arrow-next-dark.svg"); }
+body.page-light .slider-next:hover { background-image: url("slider-arrow-next-dark-h.svg"); }
+body.page-light .slider-prev { background-image: url("slider-arrow-prev-dark.svg"); }
+body.page-light .slider-prev:hover { background-image: url("slider-arrow-prev-dark-h.svg"); }
+/* margin:auto re-centres the dialog — the global `* { margin: 0 }` reset
+   strips the UA default that normally does this */
+.lightbox { border: 0; padding: 0; margin: auto; background: transparent; max-width: 92vw; max-height: 92vh; outline: 0; }
+/* lock background scroll while the lightbox is open */
+html:has(.lightbox[open]) { overflow: hidden; }
+.lightbox::backdrop { background: rgba(0, 0, 0, 0.85); }
+.lightbox img { max-width: 92vw; max-height: 92vh; display: block; cursor: zoom-out; }
+/* close cross pinned to the top-right of the screen (fixed = viewport, the
+   dialog itself only wraps the image) */
+.lightbox-close {
+  position: fixed;
+  top: 10px;
+  right: 22px;
+  border: 0;
+  background: transparent;
+  color: #f1f1f1;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:hover, .lightbox-close:focus { color: #bbb; outline: 0; }
+
+.steam-widget-wrap { padding-top: 25px; padding-bottom: 10px; text-align: center; }
+/* per-block copies of the shared wrap, so each widget tunes independently */
+.steam-pad { padding-top: var(--steam-widget-pad-top, 25px); padding-bottom: var(--steam-widget-pad-bottom, 10px); }
+.appstore-pad { padding-top: var(--appstore-widget-pad-top, 25px); padding-bottom: var(--appstore-widget-pad-bottom, 10px); }
+.steam-widget { display: block; width: 720px; max-width: 100%; height: 190px; border: 0; margin: 0 auto; }
+
+/* App Store widget: hand-built sibling of the Steam widget card */
+.appstore-widget {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 720px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background: #1b2129;
+  border-radius: 4px;
+  text-align: left;
+  text-decoration: none;
+  color: #dcdcdc;
+}
+.appstore-widget:hover { background: #222a34; }
+.asw-icon { width: 100px; height: 100px; border-radius: 22px; flex: none; }
+.asw-info { min-width: 0; }
+.asw-name { color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.asw-name-suffix { color: #9aa4ad; font-weight: 400; }
+.asw-blurb { font-size: 13px; color: #9aa4ad; line-height: 1.45; }
+.asw-get { margin-left: auto; flex: none; text-align: center; }
+.asw-price {
+  display: inline-block;
+  background: #31404e;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.asw-badge { height: 40px; width: auto; display: block; }
+/* GitHub widget: same card, styled like GitHub itself — their system font
+   stack (not the site's Nunito), grey card, repo-blue name with the octocat,
+   topic-pill tag, the green button */
+.github-widget {
+  --ghw-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 720px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  text-align: left;
+  text-decoration: none;
+  color: #1f2328;
+  font-family: var(--ghw-font);
+}
+.github-widget:hover { background: #eef1f4; border-color: #afb8c1; }
+/* GitHub font unticked on the block: follow the page font instead */
+.github-widget.ghw--page-font { font-family: var(--font-body); }
+/* the darker-grey variants, stepping down GitHub's neutral scale */
+.github-widget.ghw--dark { background: #eaeef2; }
+.github-widget.ghw--dark:hover { background: #e1e7ed; }
+.github-widget.ghw--darker { background: #dde3e9; border-color: #c3ccd4; }
+.github-widget.ghw--darker:hover { background: #d3dae1; border-color: #aab5bf; }
+/* the dark-theme versions: GitHub's own dark mode palette, plus a lighter
+   slate take on it for pages where the full dark reads too heavy */
+.github-widget.ghw--night { background: #0d1117; border-color: #30363d; color: #e6edf3; }
+.github-widget.ghw--night:hover { background: #161b22; border-color: #8b949e; }
+.github-widget.ghw--night .ghw-icon { border-color: #30363d; }
+.github-widget.ghw--night .ghw-mark { color: #e6edf3; }
+.github-widget.ghw--night .ghw-link { color: #58a6ff; }
+.github-widget.ghw--night .ghw-name-suffix,
+.github-widget.ghw--night .ghw-blurb { color: #8b949e; }
+.github-widget.ghw--night .ghw-tag { background: rgba(56, 139, 253, .15); color: #58a6ff; }
+.github-widget.ghw--night .ghw-btn { background: #238636; border-color: rgba(240, 246, 252, .1); box-shadow: none; }
+.github-widget.ghw--night:hover .ghw-btn { background: #2ea043; }
+.github-widget.ghw--night-soft { background: #373e47; border-color: #545d68; color: #cdd9e5; }
+.github-widget.ghw--night-soft:hover { background: #444c56; border-color: #768390; }
+.github-widget.ghw--night-soft .ghw-icon { border-color: #545d68; }
+.github-widget.ghw--night-soft .ghw-mark { color: #cdd9e5; }
+.github-widget.ghw--night-soft .ghw-link { color: #6cb6ff; }
+.github-widget.ghw--night-soft .ghw-name-suffix,
+.github-widget.ghw--night-soft .ghw-blurb { color: #adbac7; }
+.github-widget.ghw--night-soft .ghw-tag { background: rgba(108, 182, 255, .18); color: #6cb6ff; }
+.github-widget.ghw--night-soft .ghw-btn { background: #46954a; border-color: rgba(205, 217, 229, .1); box-shadow: none; }
+.github-widget.ghw--night-soft:hover .ghw-btn { background: #57ab5a; }
+.ghw-icon { width: 100px; height: 100px; border-radius: 12px; border: 1px solid #d0d7de; flex: none; }
+.ghw-name { display: flex; align-items: center; gap: 8px; font-size: 17px; margin-bottom: 5px; min-width: 0; }
+.ghw-mark { width: 20px; height: 20px; color: #1f2328; flex: none; }
+.ghw-link { color: #0969da; font-weight: 600; }
+.github-widget:hover .ghw-link { text-decoration: underline; }
+.ghw-name-suffix { color: #656d76; font-weight: 400; font-size: 14px; white-space: nowrap; }
+.ghw-blurb { font-size: 13px; color: #656d76; line-height: 1.5; }
+.ghw-tag {
+  display: inline-block;
+  background: #ddf4ff;
+  color: #0969da;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 2em;
+  margin-bottom: 8px;
+}
+.ghw-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1f883d;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border: 1px solid rgba(27, 31, 36, .15);
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 1px 0 rgba(27, 31, 36, .1);
+}
+.github-widget:hover .ghw-btn { background: #1a7f37; }
+/* mobile: same horizontal layout as desktop/Steam, just scaled down */
+@media (max-width: 600px) {
+  .appstore-widget, .github-widget { gap: 12px; padding: 14px; }
+  .asw-icon, .ghw-icon { width: 64px; height: 64px; border-radius: 14px; }
+  .asw-name, .ghw-name { font-size: 15px; margin-bottom: 4px; }
+  .asw-blurb, .ghw-blurb {
+    font-size: 11px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .asw-price { font-size: 12px; padding: 4px 10px; margin-bottom: 6px; }
+  .ghw-tag { font-size: 11px; padding: 2px 8px; margin-bottom: 6px; }
+  .ghw-btn { font-size: 12px; padding: 5px 10px; }
+  .ghw-name { font-size: 14px; gap: 6px; }
+  .ghw-mark { width: 16px; height: 16px; }
+  .ghw-name-suffix { font-size: 12px; }
+  .ghw-icon { border-radius: 8px; }
+  .asw-badge { height: 30px; }
+}
+
+/* per-page accents */
+.mc-button { background: var(--mc, #715f95); }
+.st-bg { background-color: #00dac9; }
+.lq-gif-stack { position: relative; max-width: 600px; margin: 0 auto; padding-top: 20px; }
+.lq-gif-stack img { display: block; width: 100%; height: auto; }
+.lq-gif-stack img + img { position: absolute; top: 20px; left: 0; }
+
+/* light game pages (.cc pages without a dark theme sheet: LQi, Sloth, M1, Animal Maker) */
+body.page-light { background: #e6e6e6; color: #172022; }
+.page-light .home-button { border-color: #172022; color: #172022; }
+.page-light .home-button:hover { background: #65b8e2; color: #fff; }
+.page-light .intro-bubble, .page-light .article-set-title, .page-light .page-title, .page-light .newsletter-title-b { color: #172022; }
+.page-light .page-subtitle { color: #555; }
+/* light pages ran lighter body text on .cc (its stack fell back to Futura LT Light) */
+.page-light .text-block { font-weight: 300; }
+.page-light .outline-sign-up-box { border-color: #172022; }
+.page-light .sign-up-box { border: 1px solid #172022; }
+
+/* ---------- embeds ---------- */
+.video-embed { aspect-ratio: 16 / 9; margin-bottom: 1.4em; }
+.video-embed iframe { width: 100%; height: 100%; border: 0; }
+
+/* .cc video treatment: wide, curved corners, hairline border, shadow */
+.feature-image-1200 { width: 100%; max-width: 1200px; }
+.feature-image-800 { width: 100%; max-width: 800px; }
+.iframe-container { overflow: hidden; padding-top: 56%; position: relative; }
+@media (max-width: 480px) { .iframe-container { padding-top: 55.4%; } }
+.iframe-container iframe {
+  border: 0;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+.curved-edges { border-radius: 15px; }
+.border-image { border: 2px solid #fff; }
+
+/* ---------- labs ribbon (prototype machinery) ---------- */
+.labs-banner {
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 15px;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+}
+.labs-banner a { color: #fff; font-weight: bold; text-decoration: none; white-space: nowrap; }
+.labs-banner a:hover { text-decoration: underline; }
+.labs-list { list-style: none; }
+.labs-list li { padding: 8px 0; border-bottom: 1px dotted #8a9191; }

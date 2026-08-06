@@ -1,0 +1,60 @@
+/* Lion Quest page — bespoke layout ported from the .cc LQ.css.
+   Content sits at tuned positions over the full-page bg2.png artwork;
+   text runs light on the dark sky, dark where the artwork lightens. */
+
+/* desktop: artwork on body, exactly as the .cc page sized it — the colour
+   zones hit their designed points against the full page height */
+body {
+  background: #282c2b url(/media/site/games/lion-quest/bg2.png) repeat-x top center;
+  background-size: auto 106%;
+}
+
+.padding-bottom-LQ-logo { padding-bottom: 70px; }
+.logo-padding-LQ { padding-top: 20px; padding-left: 20px; padding-right: 20px; width: 100%; }
+.top-gif-padding-LQ { padding-top: 40px; }
+
+/* the animals walk along strips anchored to the column's left edge */
+.lq-char-stage { position: relative; height: 30px; margin-bottom: 25px; }
+.lq-char-stage img { position: absolute; bottom: 0; left: 0; max-width: 100%; }
+
+/* the .cc source declared 1.2em here but with a typo that invalidated it,
+   so these always rendered at base size — match that */
+.lq-text-light, .lq-text-dark { max-width: 600px; margin: 0 auto; font-size: 1em; line-height: 1.5; }
+.lq-text-light { color: #f5f5f5; }
+.lq-text-dark { color: #444; }
+
+.lq-lighthouse { max-width: 1000px; margin: 0 auto; text-align: center; padding-top: 1.5em; }
+.lq-lighthouse img { max-width: 100%; height: auto; }
+
+/* .cc rhythm around the dark paragraph: 40px above (gif-set padding-bottom)
+   and 40px below (its own padding-bottom, widget follows directly) */
+.image-row { padding-top: 0; padding-bottom: 40px; }
+.steam-widget-wrap { padding-top: 0; }
+
+/* the newsletter sits on the light lower zone of the artwork: dark text/outline */
+.outline-sign-up-box { border-color: #172022; color: #172022; }
+.newsletter-title-b, .newsletter-sub-title { color: #172022; }
+
+@media (max-width: 880px) {
+  .padding-bottom-LQ-logo { padding-bottom: 0 !important; padding-top: 40px; }
+  .logo-padding-LQ { padding-bottom: 0 !important; }
+}
+
+/* mobile: compact top — logo on the dark zone, artwork nudged up so the
+   tile-to-blue transition arrives sooner, trailer on the blue; the animal
+   strips are hidden (designed for the wide column) */
+@media (max-width: 767px) {
+  /* the in-flow mobile header would eat the artwork's top zone, so the
+     image moves onto main here (starts below the header), nudged up */
+  body { background-image: none; }
+  main {
+    background: url(/media/site/games/lion-quest/bg2.png) repeat-x center -50px;
+    background-size: auto 106%;
+  }
+  /* trailer (and everything after) drops below the top artwork zone */
+  main > .padded-container:not(.steam-widget-wrap) { margin-top: 80px; }
+  .lq-chars-wrap { display: none; }
+  .padding-bottom-LQ-logo { padding-top: 12px !important; }
+  /* visual shift only — background and following content stay put */
+  .logo-padding-LQ { padding-top: 8px; position: relative; top: 20px; }
+}
