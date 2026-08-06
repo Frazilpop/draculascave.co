@@ -21,34 +21,65 @@ body.page-light .dc-header { background: rgba(23, 32, 34, 0.92); }
 .dc-header .dc-nav { display: flex; align-items: center; gap: 24px; flex: 1; }
 .dc-header .dc-nav-right { justify-content: flex-end; }
 .dc-header .dc-logo { display: block; }
-/* layered logo: hi-res smooth-alpha text PNG + pixel-art sprite GIF overlay */
+/* layered logo: hi-res smooth-alpha text PNG + pixel-art sprite GIF overlay.
+   The .logo-sprite placement is shared with the masthead mounts below. */
 .dc-header .logo-stack { position: relative; display: inline-block; }
 .dc-header .logo-text { height: 45px; width: auto; display: block; }
-.dc-header .logo-sprite {
-  position: absolute;
-  left: 52.553%;
-  top: 0;
-  width: 22.553%;
-  height: 100%;
-  image-rendering: pixelated;
-}
 .dc-header .dc-nav a { color: #fff; font-weight: 800; font-size: 16px; text-decoration: none; }
 /* nav link font (Universal → Header → Navigation font); default is the header's Nunito */
 .dc-header .dc-nav.nav-font-helvetica a { font-family: Helvetica, Arial, sans-serif; }
 .dc-header .dc-nav.nav-font-oswald a { font-family: 'Oswald', Arial, sans-serif; font-weight: 600; letter-spacing: 0.5px; }
 .dc-header .dc-nav.nav-font-mono a { font-family: Consolas, ui-monospace, 'SF Mono', Menlo, monospace; font-size: 15px; }
-.dc-header .dc-nav a:hover { text-decoration: underline; }
+/* hover dims the label; the underline is reserved for "you are here" — the
+   section the page sits in (build.js passes the page's permalink to
+   renderHeader, which flags the matching link .is-current). Home matches
+   nothing, and Steam never matches: it is external. */
+.dc-header .dc-nav a { transition: color 0.12s ease; }
+.dc-header .dc-nav a:hover { color: #b0b6b8; }
+.dc-header .dc-nav a.is-current { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
 .dc-header .dc-nav a img { height: 20px; width: auto; margin-left: 6px; vertical-align: text-bottom; display: inline-block; }
 .dc-header .dc-nav a img.ico-fox { height: 17px; position: relative; top: -2px; } /* fox artwork fills its box */
 .dc-header .dc-nav a img.ico-steam { position: relative; top: -2px; }
 
-/* big masthead logo (landing pages + blog) */
-/* bottom padding is a site-wide block option (--banner-logo-pad-bottom,
-   content/universal/block-styles.yml), default 5px */
-.banner-logo { text-align: center; padding: 5px 15px var(--banner-logo-pad-bottom, 5px); }
-.banner-logo .logo-stack { position: relative; display: block; margin: 0 auto; width: min(840px, 100%); }
-.banner-logo .logo-text { width: 100%; height: auto; display: block; }
-.banner-logo .logo-sprite {
+/* One size for the Dracula's Cave logo wherever it sits below the nav row —
+   the .banner-logo masthead (hubs, blog) and the header's own copy once the
+   header stacks on mobile. Both resolve to min(--masthead-max, 100% - 2
+   gutters), so the logo cannot drift between page types. */
+:root {
+  --masthead-max: 840px;
+  --masthead-gutter: 15px;              /* structural: the nav row's inset */
+  --masthead-pad-top: 5px;
+  --logo-gutter: var(--masthead-gutter); /* desktop: logo sits on the same inset */
+}
+/* The text column the logo's baked-in text aligns to on mobile. One value for
+   every page — including the blog, whose own text column is 15px: matching it
+   there would need a wider logo than the rest of the site uses, and the logo
+   being the same size everywhere matters more than tracking that 15px.
+   Declared on body (not :root) so any per-page override is in scope when
+   --logo-gutter is resolved below. */
+body { --masthead-text-inset: 30px; }
+
+/* big masthead logo (landing pages + blog) and the mobile logo band (home).
+   Both mount the same layered logo, so they share one geometry — a change
+   here moves every masthead on the site together. */
+/* .banner-logo's bottom padding is a site-wide block option
+   (--banner-logo-pad-bottom, content/universal/block-styles.yml), default 5px;
+   the band's paddings are --mobile-logo-pad-top/-bottom (see site.css) */
+/* editable global as a longhand override, never inside the shorthand — see the
+   note on .mobile-logo-section in site.css */
+.banner-logo { text-align: center; padding: var(--masthead-pad-top) var(--logo-gutter); padding-bottom: var(--banner-logo-pad-bottom, 5px); }
+/* the whole masthead is a link home, in every mount */
+.banner-logo a,
+.mobile-logo-section a { display: block; text-decoration: none; }
+.banner-logo .logo-stack,
+.mobile-logo-section .logo-stack { position: relative; display: block; margin: 0 auto; width: min(var(--masthead-max), 100%); }
+.banner-logo .logo-text,
+.mobile-logo-section .logo-text { width: 100%; height: auto; display: block; }
+/* the pixel-art sprite overlays the text PNG at the same spot in all three
+   mounts (header mark, masthead, mobile band) */
+.dc-header .logo-sprite,
+.banner-logo .logo-sprite,
+.mobile-logo-section .logo-sprite {
   position: absolute;
   left: 52.553%;
   top: 0;
@@ -63,17 +94,32 @@ body.page-blog .dc-header { position: static; }
    The stacked header would blanket the screen if fixed, so it scrolls with
    the page — except on home, whose slim menu row stays fixed. */
 @media (max-width: 767px) {
-  .dc-header { flex-wrap: wrap; justify-content: center; row-gap: 4px; padding: 8px 12px 10px; min-height: 0; position: static; }
-  body.page-home .dc-header { position: fixed; top: 0; left: 0; right: 0; }
+  /* Align the logo's baked-in text with the page's text column. The PNG holds
+     "DRACULA'S CAVE" behind a transparent margin of 2.3404% of the image's
+     width, so that margin shrinks as the logo shrinks while the text column's
+     inset stays fixed — the two only agree at one width. Solving
+        inset = gutter + m(viewport - 2*gutter)      (m = 44/1880)
+     for the gutter gives the line below. Clamped at 0: the blog's 15px column
+     is reachable below ~641px, above which the image's own margin exceeds it. */
+  body { --logo-gutter: max(0px, calc((var(--masthead-text-inset) - 2.3404vw) / 0.95319)); }
+  .dc-header { flex-wrap: wrap; justify-content: center; row-gap: 4px; padding: 8px var(--masthead-gutter) 10px; min-height: 0; position: static; }
+  /* sticky, not fixed: home's slim menu row still pins to the top on scroll,
+     but it stays in flow, so the logo band below it needs no hardcoded offset
+     to compensate for the header's height (which used to overshoot by 6px and
+     pushed home's logo lower than every other page's) */
+  body.page-home .dc-header { position: sticky; top: 0; }
   .dc-header .dc-nav { flex: none; order: 1; gap: 14px; }
   .dc-header .dc-nav a { font-size: 14px; }
   .dc-header .dc-nav a img { height: 16px; width: auto; margin-left: 4px; }
   .dc-header .dc-nav a img.ico-fox { height: 13px; }
-  .dc-header .dc-logo { order: 2; flex-basis: 100%; display: flex; justify-content: center; padding: 4px 4px 6px; }
-  .dc-header .logo-stack { width: 94%; max-width: 420px; }
+  /* the header keeps its own 15px gutter so the nav row doesn't move; the logo
+     is sized straight from the viewport instead, so it lands on --logo-gutter
+     regardless of the header's padding (and can exceed it, which a padding
+     adjustment couldn't). justify-content: center does the positioning. */
+  .dc-header .dc-logo { order: 2; flex-basis: 100%; display: flex; justify-content: center; padding: 4px 0 6px; }
+  .dc-header .logo-stack { width: min(var(--masthead-max), calc(100vw - 2 * var(--logo-gutter))); }
   .dc-header .logo-text { height: auto; width: 100%; }
   body.page-home .dc-logo { display: none; }
-  body.page-home .mobile-logo-section { padding-top: 48px; }
   /* pages with a banner-logo masthead: it IS the big logo — no header copy */
   body.has-banner-logo .dc-header .dc-logo { display: none; }
 }

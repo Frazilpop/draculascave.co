@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="/assets/site.css">
 <link rel="stylesheet" href="/assets/header.css">
 <link rel="stylesheet" href="/assets/footer.css">
-<style>:root{--banner-logo-pad-bottom:20px}</style>
+<style>:root{--banner-logo-pad-bottom:20px;--mobile-logo-pad-top:5px}</style>
 
 </head>
 <body class="page-home">
@@ -35,7 +35,10 @@
   </nav>
 </header>
 <main>
-<div class="mobile-logo-section"><a href="/" aria-label="Dracula's Cave — home"><video src="/media/site/home/draculas-cave-animated-logo.mp4" autoplay loop muted playsinline></video></a></div>
+<div class="mobile-logo-section"><a href="/" aria-label="Dracula's Cave — home"><span class="logo-stack">
+    <img class="logo-text" src="/media/site/home/draculas-cave-logo-text.png" alt="">
+    <img class="logo-sprite" src="/media/site/home/draculas-cave-sprite.gif" alt="">
+  </span></a></div>
 <div class="feature-video-container">
 <video autoplay loop muted playsinline preload="metadata" poster="/media/site/home/wiz-promo-video-2-v2-still.jpg" disablepictureinpicture>
     <source src="/media/site/home/wiz-promo-video-2-v2.mp4" type="video/mp4">
