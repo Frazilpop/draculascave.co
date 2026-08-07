@@ -68,11 +68,14 @@ body { --masthead-text-inset: 30px; }
 /* editable global as a longhand override, never inside the shorthand — see the
    note on .mobile-logo-section in site.css */
 .banner-logo { text-align: center; padding: var(--masthead-pad-top) var(--logo-gutter); padding-bottom: var(--banner-logo-pad-bottom, 5px); }
-/* the whole masthead is a link home, in every mount */
+/* The masthead is a link, in every mount — but only the artwork is the click
+   target: the anchor takes the logo's own width rather than the band's, so
+   the empty space either side of a narrow logo isn't clickable. (The band's
+   padding sits on .banner-logo, outside the anchor, so it never was.) */
 .banner-logo a,
-.mobile-logo-section a { display: block; text-decoration: none; }
+.mobile-logo-section a { display: block; text-decoration: none; width: min(var(--masthead-max), 100%); margin: 0 auto; }
 .banner-logo .logo-stack,
-.mobile-logo-section .logo-stack { position: relative; display: block; margin: 0 auto; width: min(var(--masthead-max), 100%); }
+.mobile-logo-section .logo-stack { position: relative; display: block; width: 100%; }
 .banner-logo .logo-text,
 .mobile-logo-section .logo-text { width: 100%; height: auto; display: block; }
 /* the pixel-art sprite overlays the text PNG at the same spot in all three
@@ -116,7 +119,11 @@ body.page-blog .dc-header { position: static; }
      is sized straight from the viewport instead, so it lands on --logo-gutter
      regardless of the header's padding (and can exceed it, which a padding
      adjustment couldn't). justify-content: center does the positioning. */
-  .dc-header .dc-logo { order: 2; flex-basis: 100%; display: flex; justify-content: center; padding: 4px 0 6px; }
+  /* the anchor has to fill the row for the wrap and the centring to work, so
+     the hit area is narrowed instead: clicks pass through the row and only
+     the logo stack inside it takes them (the click still bubbles to the <a>) */
+  .dc-header .dc-logo { order: 2; flex-basis: 100%; display: flex; justify-content: center; padding: 4px 0 6px; pointer-events: none; }
+  .dc-header .dc-logo .logo-stack { pointer-events: auto; }
   .dc-header .logo-stack { width: min(var(--masthead-max), calc(100vw - 2 * var(--logo-gutter))); }
   .dc-header .logo-text { height: auto; width: 100%; }
   body.page-home .dc-logo { display: none; }

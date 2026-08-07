@@ -135,11 +135,14 @@ h2.title, h2.title a { font-size: 24px; }
 .entry h3 { font-size: 18px; }
 .entry h4 { font-size: 15px; }
 .entry ul, .entry ol { padding-left: 1.6em; }
-.entry img { max-width: 100%; height: auto; display: block; margin: 1.4em auto; }
-.entry img.banner { width: 100%; } /* wide images always fill the column */
+/* video sits exactly where an img would: GIFs converted to MP4 by the SEO panel
+   land here, and an autoplay-loop-muted video has to be indistinguishable from
+   the animated GIF it replaced */
+.entry img, .entry video { max-width: 100%; height: auto; display: block; margin: 1.4em auto; }
+.entry img.banner, .entry video.banner { width: 100%; } /* wide images always fill the column */
 .entry a { border-bottom: 1px dotted var(--muted); }
 .entry a:hover { text-decoration: none; border-bottom-style: solid; }
-.entry a:has(img) { border-bottom: none; }
+.entry a:has(img), .entry a:has(video) { border-bottom: none; }
 .entry blockquote {
   border-left: 3px solid var(--edge);
   padding-left: 15px;
@@ -184,7 +187,9 @@ h2.title, h2.title a { font-size: 24px; }
 /* ---------- home / listing ---------- */
 .excerpt { padding-bottom: 10px; }
 .excerpt-thumb { display: block; margin: 14px 0 15px; border-bottom: none !important; }
-.excerpt-thumb img {
+/* :not() keeps the game cards' hover-to-play clip, which is an overlay */
+.excerpt-thumb img,
+.excerpt-thumb:not(.promo-video-hover) video {
   display: block;
   width: 100%;
   height: auto; /* natural aspect ratio — never crop, but always fill */

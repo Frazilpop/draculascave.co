@@ -85,6 +85,10 @@ body:not(.page-home) main { padding-top: 60px; }
   padding-top: var(--mobile-logo-pad-top, var(--masthead-pad-top));
   padding-bottom: var(--mobile-logo-pad-bottom, var(--masthead-pad-top));
 }
+/* home's darker page needs the band on the header's colour rather than the
+   standard #262e2f: #1b1919 is where the header's 5%-white glass lands over
+   home's #0f0d0d, so nav row and logo band read as one surface. */
+body.page-home .mobile-logo-section { background: #1b1919; }
 .mobile-logo-section a { display: block; }
 .mobile-logo-section video { display: block; width: 100%; max-width: var(--masthead-max); margin: 0 auto; }
 @media (max-width: 767px) { .mobile-logo-section { display: block; } }

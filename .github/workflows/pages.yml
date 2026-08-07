@@ -15,6 +15,13 @@
 # publishes a full snapshot of the site, so deploy time tracks total site
 # weight. Keeping the site small (see the SEO panel's image optimiser and GIF
 # converter) is what actually makes this fast.
+#
+# This deploy path depends on Actions being up. If Actions is down (or this
+# workflow is ever the thing in the way) publishing can be put back on the old
+# legacy build with one command, and no content changes:
+#   gh api -X PUT repos/Frazilpop/draculascave.co/pages -f build_type=legacy
+# Switch it back with build_type=workflow. The live site is unaffected by the
+# flip either way — the last successful deployment stays up.
 name: Deploy to GitHub Pages
 
 on:
