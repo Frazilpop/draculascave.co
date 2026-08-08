@@ -105,13 +105,18 @@ body.page-blog .dc-header { position: static; }
      for the gutter gives the line below. Clamped at 0: the blog's 15px column
      is reachable below ~641px, above which the image's own margin exceeds it. */
   body { --logo-gutter: max(0px, calc((var(--masthead-text-inset) - 2.3404vw) / 0.95319)); }
-  .dc-header { flex-wrap: wrap; justify-content: center; row-gap: 4px; padding: 8px var(--masthead-gutter) 10px; min-height: 0; position: static; }
+  /* The nav row's bottom inset lives on the nav, not the header: on a page that
+     stacks a logo row beneath it that inset has to sit ABOVE the row's divider,
+     with only the logo band's own padding below it. Rows are butted together
+     (row-gap: 0) so the divider is the only thing between them — the nav never
+     wraps (no flex-wrap on .dc-nav), so the gap had no other job. */
+  .dc-header { flex-wrap: wrap; justify-content: center; row-gap: 0; padding: 8px var(--masthead-gutter) 0; min-height: 0; position: static; }
   /* sticky, not fixed: home's slim menu row still pins to the top on scroll,
      but it stays in flow, so the logo band below it needs no hardcoded offset
      to compensate for the header's height (which used to overshoot by 6px and
      pushed home's logo lower than every other page's) */
   body.page-home .dc-header { position: sticky; top: 0; }
-  .dc-header .dc-nav { flex: none; order: 1; gap: 14px; }
+  .dc-header .dc-nav { flex: none; order: 1; gap: 14px; padding-bottom: 10px; }
   .dc-header .dc-nav a { font-size: 14px; }
   .dc-header .dc-nav a img { height: 16px; width: auto; margin-left: 4px; }
   .dc-header .dc-nav a img.ico-fox { height: 13px; }
@@ -122,11 +127,49 @@ body.page-blog .dc-header { position: static; }
   /* the anchor has to fill the row for the wrap and the centring to work, so
      the hit area is narrowed instead: clicks pass through the row and only
      the logo stack inside it takes them (the click still bubbles to the <a>) */
-  .dc-header .dc-logo { order: 2; flex-basis: 100%; display: flex; justify-content: center; padding: 4px 0 6px; pointer-events: none; }
+  /* The row IS home's mobile logo band (.mobile-logo-section, site.css), drawn
+     inside the header: full-bleed, the nav row's inset and a divider above it,
+     and the band's own --mobile-logo-pad-* below — so the logo starts at the
+     same offset whichever mount a page uses. Full bleed comes from the row
+     overflowing the header's gutters (flex-basis) and being pulled back onto
+     the screen edges (margin), so the divider reaches both of them; negative
+     margins alone would just centre a 15px-inset row. Editable globals go in
+     as longhands, never inside a shorthand — see .mobile-logo-section. */
+  .dc-header .dc-logo {
+    order: 2; display: flex; justify-content: center; pointer-events: none;
+    flex-basis: calc(100% + 2 * var(--masthead-gutter));
+    margin-inline: calc(-1 * var(--masthead-gutter));
+    border-top: 1px solid rgba(111, 111, 111, 0.35); /* the header's own rule */
+    padding: var(--masthead-pad-top) 0;
+    padding-top: var(--mobile-logo-pad-top, var(--masthead-pad-top));
+    padding-bottom: var(--mobile-logo-pad-bottom, var(--masthead-pad-top));
+  }
   .dc-header .dc-logo .logo-stack { pointer-events: auto; }
   .dc-header .logo-stack { width: min(var(--masthead-max), calc(100vw - 2 * var(--logo-gutter))); }
   .dc-header .logo-text { height: auto; width: 100%; }
   body.page-home .dc-logo { display: none; }
   /* pages with a banner-logo masthead: it IS the big logo — no header copy */
   body.has-banner-logo .dc-header .dc-logo { display: none; }
+  /* ...so everything else stacks the logo row, and there the header's bottom
+     border closes the logo band rather than the nav row: it takes the band's
+     brighter rule (#6f6f6f, .mobile-logo-section in site.css) instead of the
+     dim one the nav row's divider uses. Keep this selector in step with the
+     two hide rules above — it is their complement. */
+  body:not(.page-home):not(.has-banner-logo) .dc-header { border-bottom-color: #6f6f6f; }
+  /* On mobile a .banner-logo masthead IS the logo band, so it closes with the
+     same rule and takes the band's --mobile-logo-pad-* rather than the
+     masthead's --banner-logo-pad-bottom: one set of knobs for the mobile logo
+     wherever it sits (that global still governs desktop, and the blog). The
+     blog is out: its masthead runs straight into a light page, with no rule. */
+  body:not(.page-blog) .banner-logo {
+    padding-top: var(--mobile-logo-pad-top, var(--masthead-pad-top));
+    padding-bottom: var(--mobile-logo-pad-bottom, var(--masthead-pad-top));
+    border-bottom: 1px solid #6f6f6f;
+    /* the masthead's own gap moves BELOW the rule, since the band's padding is
+       what closes the logo now. --banner-logo-pad-bottom goes on meaning the
+       same thing either side of the breakpoint — the space between masthead and
+       page content — which the hubs depend on: their page-title block sets
+       `pad: false`, so its own spacer isn't there to hold the title clear. */
+    margin-bottom: var(--banner-logo-pad-bottom, 5px);
+  }
 }

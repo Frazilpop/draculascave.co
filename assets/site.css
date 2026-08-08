@@ -112,6 +112,34 @@ body.page-home .mobile-logo-section { background: #1b1919; }
 }
 .home-button:hover { background: #292739; }
 .inline-button { display: inline-block; padding: 8px 20px; margin-left: 10px; margin-right: 10px; }
+/* compact button geometry — smaller type and a tighter box (~31px against the
+   standard button's 42px). Used on its own it keeps the plain button's
+   transparent fill, white outline and 4px corners; the fills below layer on
+   top and square the corners off. The border stays 1px throughout (transparent
+   under a fill), so every compact variant is exactly the same height. */
+.home-button.home-button--compact {
+  padding: 5px 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+/* solid fills. --btn-solid-bg is the per-block custom colour and
+   --btn-solid-default the variant's own, so a custom colour still wins over
+   both. Hover LIGHTENS (the newsletter button darkens): from fills this dark
+   there is no headroom left downwards. The multi-class selectors and the
+   body-scoped light rules outrank .home-button and .page-light .home-button
+   wherever they sit in the file. */
+.home-button.home-button--solid {
+  --btn-fill: var(--btn-solid-bg, var(--btn-solid-default, #473a6a));
+  border-color: transparent;
+  border-radius: 2px;
+  background: var(--btn-fill);
+  color: #fff;
+}
+.home-button.home-button--red { --btn-solid-default: #8b0000; }  /* the coming-soon badge's red */
+.home-button.home-button--solid:hover { background: color-mix(in srgb, var(--btn-fill) 82%, white); }
+body.page-light .home-button--solid { color: #fff; border-color: transparent; }
+body.page-light .home-button--solid:hover { background: color-mix(in srgb, var(--btn-fill) 82%, white); }
 .no-decoration { text-decoration: none !important; }
 .display-inline-block { display: inline-block; }
 .inline-button-container { display: block; margin-left: auto; margin-right: auto; text-align: center; }
@@ -146,6 +174,9 @@ body.page-home .mobile-logo-section { background: #1b1919; }
 @media (min-width: 768px) { .intro-bubble { max-width: 450px; } }
 @media (max-width: 767px) {
   .align-center-d { text-align: left; padding-left: 30px; padding-right: 30px; }
+  /* opt back in to centering on mobile (page-title's "Center on mobile"); the
+     two-class selector outranks the rule above whatever the source order */
+  .align-center-d.align-center-m { text-align: center; }
   .intro-bubble { text-align: center !important; }
 }
 .full-hr { border-bottom: 1px solid #8a9191; padding-top: 15px; }
@@ -281,8 +312,32 @@ body.page-brand-dark::before {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: #303030;
+  background: var(--promo-card-bg, #303030);
 }
+/* promo-grid card options. The vars are set on the grid, so a preset (or the
+   custom colour, inline) only reaches that block's cards — every other user of
+   .feature-image-960 keeps the #303030 default. Presets: a darker neutral, and
+   two blue-blacks pitched just above the .page-brand / .page-brand-dark
+   gradients so the tile still reads as a raised card on them. */
+.promo-grid--card-dark { --promo-card-bg: #232327; }
+.promo-grid--card-brand { --promo-card-bg: #1c1c28; }
+.promo-grid--card-brand-dark { --promo-card-bg: #12121c; }
+/* the air around the promo card's CTA, adjustable per block at both ends.
+   Both styles sit 20px off the card's bottom edge; above, the compact button
+   pulls in tighter (15px, or the mobile 10px .padding-top-r has always used,
+   would leave the smaller button marooned). Scoped to these classes because
+   .padding-top-r / .padding-bottom-25 are shared with the post grid and the
+   store buttons; the two-class selectors beat them (and the mobile 10px)
+   whatever the source order, so the mobile value is restated to keep it. */
+.promo-btn--std.padding-bottom-25,
+.promo-btn--tight.padding-bottom-25 { padding-bottom: var(--promo-btn-pad-bottom, 20px); }
+.promo-btn--std.padding-top-r { padding-top: var(--promo-btn-pad-top, 15px); }
+@media (max-width: 767px) { .promo-btn--std.padding-top-r { padding-top: var(--promo-btn-pad-top, 10px); } }
+.promo-btn--tight.padding-top-r { padding-top: var(--promo-btn-pad-top, 8px); }
+/* thin outline round the whole tile (image included) — box-sizing: border-box
+   keeps the grid columns the same width with it on */
+.promo-grid--outlined .feature-image-960 { border: 1px solid var(--promo-card-border, rgba(255, 255, 255, .14)); }
+body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16); }
 .feature-image-960 img { width: 100%; }
 .drop-shadow { box-shadow: 5px 5px 8px 0 rgba(22, 22, 22, 0.25), 0 6px 20px 0 rgba(22, 22, 22, 0.19); }
 .grid-name {
@@ -445,6 +500,8 @@ body.page-brand-dark::before {
 .image-row img { max-width: 100%; height: auto; }
 .image-row img.bordered { border: 2px solid #fff; }
 .article-set-title { font-size: 115%; font-weight: 400; line-height: 1.1; color: #fff; }
+/* a gallery rule with no title above it has no gap to hold open */
+.gallery-hr--bare { padding-top: 0; }
 .padding-15 { padding: 0 15px; }
 @media (max-width: 767px) {
   .padding-15 { padding-left: 20px; padding-right: 20px; }
