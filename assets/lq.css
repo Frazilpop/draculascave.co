@@ -26,10 +26,10 @@ body {
 .lq-lighthouse { max-width: 1000px; margin: 0 auto; text-align: center; padding-top: 1.5em; }
 .lq-lighthouse img { max-width: 100%; height: auto; }
 
-/* .cc rhythm around the dark paragraph: 40px above (gif-set padding-bottom)
-   and 40px below (its own padding-bottom, widget follows directly) */
-.image-row { padding-top: 0; padding-bottom: 40px; }
-.steam-widget-wrap { padding-top: 0; }
+/* the .cc rhythm around the dark paragraph (image row 0 above / 40 below,
+   widget flush against it) lives on the blocks' own padding fields in
+   lion-quest.md — plain rules here load after site.css and would silently
+   outrank those per-block values */
 
 /* the newsletter sits on the light lower zone of the artwork: dark text/outline */
 .outline-sign-up-box { border-color: #172022; color: #172022; }

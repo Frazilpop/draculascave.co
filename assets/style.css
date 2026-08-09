@@ -135,7 +135,13 @@ h2.title, h2.title a { font-size: 24px; }
    28.8px of leading) and a heading that wrapped opened a paragraph-sized gap
    between its own two lines. 1.25 lands an h3 on ~22px — the same leading the
    site pages give their h3s (.text-block h3, site.css). */
-.entry h2, .entry h3, .entry h4 { color: var(--heading); margin: 1.6em 0 0.6em; font-family: var(--font-display); line-height: 1.25; }
+.entry h1, .entry h2, .entry h3, .entry h4 { color: var(--heading); margin: 1.6em 0 0.6em; font-family: var(--font-display); line-height: 1.25; }
+/* imported posts write their section headings as `#`, so an in-body h1 is real
+   content, not the post title (that's h1.title, above .entry). It needs a
+   pinned size as well as the leading: left to the UA it's 2em everywhere
+   except inside <article>, where newer engines drop it to 1.5em. 24px sits a
+   step above h2 and below the 30px title. */
+.entry h1 { font-size: var(--text-2xl); }
 .entry h2 { font-size: var(--text-xl); }
 .entry h3 { font-size: 18px; }
 .entry h4 { font-size: 15px; }
