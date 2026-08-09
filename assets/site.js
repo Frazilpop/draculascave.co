@@ -5,7 +5,33 @@
 (function () {
 const bound = (window.__dcmsxBound = window.__dcmsxBound || new WeakSet());
 
-// play preview videos on hover; touch devices get the still (preload="none")
+// play preview videos on hover; a touch-only screen has no hover, so there a
+// card fades its clip in once it has sat mostly on screen for a moment, and
+// fades back to the still when it scrolls away (muted+playsinline keeps
+// script-started playback allowed on iOS/Android)
+const IN_VIEW_MS = 1500;
+const inViewTimers = new WeakMap();
+const autoPlays = window.matchMedia('(hover: none)').matches &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+  'IntersectionObserver' in window;
+const watcher = !autoPlays ? null : new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    const card = entry.target;
+    const video = card.querySelector('video');
+    if (entry.isIntersecting) {
+      inViewTimers.set(card, setTimeout(() => {
+        card.classList.add('playing');
+        video.play().catch(() => {});
+      }, IN_VIEW_MS));
+    } else {
+      clearTimeout(inViewTimers.get(card));
+      card.classList.remove('playing');
+      video.pause();
+      video.currentTime = 0;
+    }
+  });
+}, { threshold: 0.6 });
+
 document.querySelectorAll('.promo-video-hover').forEach((card) => {
   if (bound.has(card)) return;
   bound.add(card);
@@ -20,6 +46,7 @@ document.querySelectorAll('.promo-video-hover').forEach((card) => {
     video.pause();
     video.currentTime = 0;
   });
+  if (watcher) watcher.observe(card);
 });
 
 // screenshot carousel (.cc slick-slider-single behaviour):

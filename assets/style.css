@@ -130,7 +130,12 @@ h2.title, h2.title a { font-size: 24px; }
 
 .entry { overflow-wrap: break-word; }
 .entry p, .entry ul, .entry ol, .entry blockquote, .entry figure { margin-bottom: 1.4em; }
-.entry h2, .entry h3, .entry h4 { color: var(--heading); margin: 1.6em 0 0.6em; font-family: var(--font-display); }
+/* headings need their own line-height: body's 1.6 is a unitless factor, so it
+   re-resolves against the heading's larger font-size (an 18px h3 inherited
+   28.8px of leading) and a heading that wrapped opened a paragraph-sized gap
+   between its own two lines. 1.25 lands an h3 on ~22px — the same leading the
+   site pages give their h3s (.text-block h3, site.css). */
+.entry h2, .entry h3, .entry h4 { color: var(--heading); margin: 1.6em 0 0.6em; font-family: var(--font-display); line-height: 1.25; }
 .entry h2 { font-size: var(--text-xl); }
 .entry h3 { font-size: 18px; }
 .entry h4 { font-size: 15px; }

@@ -161,39 +161,89 @@ body.page-light .home-button--solid:hover { background: color-mix(in srgb, var(-
    display text, which matters once a title wraps on a narrow screen */
 .text-block h2 { margin: 1.6em 0 0.6em; font-size: 1.25rem; line-height: 1.3; }
 .text-block h3 { margin: 1.4em 0 0.5em; font-size: 1.05rem; line-height: 1.35; }
+/* the block's padding is meant to BE the gap, but a child's margin sits inside
+   it: the last paragraph's 1.4em was added to padBottom (so 0 still showed
+   22px), and a leading heading's top margin collapsed out through a 0
+   padding-top. Scoped to .text-pad — the page-title, subheading and intro
+   blocks share .text-block and keep their own spacing. */
+.text-block.text-pad > :first-child { margin-top: 0; }
+.text-block.text-pad > :last-child { margin-bottom: 0; }
 .page-light h1, .page-light h2, .page-light h3 { color: #172022; }
 .text-block ul, .text-block ol { padding-left: 40px; } /* the reset strips the browser indent */
 .classic-hyperlink a { color: #0066cc; text-decoration: underline; font-weight: 500; }
 .classic-hyperlink a:hover, .classic-hyperlink a:focus { color: #004999; }
+/* that blue is pitched for white paper — on the near-black brand gradient it
+   sinks into the background, so those pages get a lighter one (and hover goes
+   lighter still, since going darker there means going invisible) */
+body.page-brand .classic-hyperlink a, body.page-brand-dark .classic-hyperlink a { color: #66c2ff; }
+body.page-brand .classic-hyperlink a:hover, body.page-brand .classic-hyperlink a:focus,
+body.page-brand-dark .classic-hyperlink a:hover, body.page-brand-dark .classic-hyperlink a:focus { color: #a5dcff; }
 .align-center-d { text-align: center; }
-.intro-bubble { color: #fff; font-weight: 800; }
+/* 800 is what this block has always been, so it stays the unset value; the
+   block's Font weight field swaps it (Nunito is variable across 200–1000) */
+.intro-bubble { color: #fff; font-weight: var(--font-weight, 800); }
 /* the intro block's text-to-line gap is one site-wide option (--intro-gap):
    the whole 35px (was 20px here + 15px on the rule) lives on the text side,
    and .intro-hr zeroes the shared rule's own padding */
-.text-block-intro { font-size: 110%; padding-bottom: var(--intro-gap, 35px); }
+.text-block-intro { font-size: 110%; padding-bottom: var(--rule-gap, var(--intro-gap, 35px)); }
+@media (max-width: 767px) {
+  .text-block-intro { padding-bottom: var(--rule-gap-m, var(--rule-gap, var(--intro-gap, 35px))); }
+}
 @media (min-width: 768px) { .intro-bubble { max-width: 450px; } }
 @media (max-width: 767px) {
   .align-center-d { text-align: left; padding-left: 30px; padding-right: 30px; }
+  /* the markdown text block's gutter is .text-block's own 20px; without this
+     the "centred on desktop" variant widens to the 30px above and stops
+     lining up with plain text blocks on a phone */
+  .text-pad.align-center-d { padding-left: 20px; padding-right: 20px; }
   /* opt back in to centering on mobile (page-title's "Center on mobile"); the
      two-class selector outranks the rule above whatever the source order */
   .align-center-d.align-center-m { text-align: center; }
   .intro-bubble { text-align: center !important; }
+  /* opt back out of that centering (section intro's "Left-align on mobile");
+     the two-class selector outranks the rule above */
+  .intro-bubble.align-left-m { text-align: left !important; }
+  .intro-bubble { font-weight: var(--font-weight-m, var(--font-weight, 800)); }
 }
 .full-hr { border-bottom: 1px solid #8a9191; padding-top: 15px; }
 .intro-hr { padding-top: 0; }   /* gap handled by .text-block-intro, see above */
-/* homepage rhythm: tighter section intros; "Highlights" loses more up top */
-body.page-home .padding-top:has(+ .text-block-intro) { padding-top: 25px; }
-body.page-home .full-hr + .padding-top { padding-top: 25px; }
-body.page-home .software-spacer { padding-top: calc(var(--spacer-pad-top, 80px) / 2); }
+/* homepage rhythm: tighter section intros; "Highlights" loses more up top.
+   These outrank the block-level classes, so they read the per-block vars too —
+   otherwise a value set on a home-page block would silently do nothing. */
+body.page-home .padding-top:has(+ .text-block-intro) { padding-top: var(--pad-top, 25px); }
+body.page-home .full-hr + .padding-top { padding-top: var(--pad-bottom, 25px); }
+@media (max-width: 767px) {
+  body.page-home .padding-top:has(+ .text-block-intro) { padding-top: var(--pad-top-m, var(--pad-top, 25px)); }
+}
+body.page-home .software-spacer { padding-top: var(--pad-top, calc(var(--spacer-pad-top, 80px) / 2)); }
 .padding-top { padding-top: 40px; }
 .padding-bottom { padding-bottom: 40px; }
+/* the spacer that closes a statement/title block — its height is that block's
+   "space below the line" (--pad-bottom), 40px until one is set */
+.desktop-only-padding-top { padding-top: var(--pad-bottom, 40px); }
 /* per-block leading spacers / paddings: amounts are site-wide block options
    (content/universal/block-styles.yml, edited via the globe panel); every
    var() fallback is the block's original hardcoded value */
 .page-title-pad { padding-top: var(--page-title-pad-top, 40px); }
-.intro-pad { padding-top: var(--intro-pad-top, 40px); }
-.text-pad.padding-top { padding-top: var(--text-pad-top, 40px); }
-.text-pad.padding-bottom { padding-bottom: var(--text-pad-bottom, 40px); }
+.intro-pad { padding-top: var(--pad-top, var(--intro-pad-top, 40px)); }
+@media (max-width: 767px) {
+  .intro-pad { padding-top: var(--pad-top-m, var(--pad-top, var(--intro-pad-top, 40px))); }
+}
+/* per-block overrides come in as inline custom properties (blocks.js padVars):
+   --pad-top / --pad-bottom, plus the --pad-top-m / --pad-bottom-m pair when
+   "alt padding for mobile" is ticked. Custom properties rather than plain
+   padding because the phone value needs a media query, which an inline style
+   can't carry. Each var() nests: block mobile → block desktop → site-wide → the
+   original hardcoded value. */
+.text-pad.padding-top { padding-top: var(--pad-top, var(--text-pad-top, 40px)); }
+.text-pad.padding-bottom { padding-bottom: var(--pad-bottom, var(--text-pad-bottom, 40px)); }
+/* the page title's extra spacing is an empty div, so its height is --pad */
+.pad-spacer { padding-top: var(--pad, 0px); }
+@media (max-width: 767px) {
+  .text-pad.padding-top { padding-top: var(--pad-top-m, var(--pad-top, var(--text-pad-top, 40px))); }
+  .text-pad.padding-bottom { padding-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--text-pad-bottom, 40px))); }
+  .pad-spacer { padding-top: var(--pad-m, var(--pad, 0px)); }
+}
 .newsletter-pad.padding-top { padding-top: var(--newsletter-pad-top, 40px); }
 .newsletter-pad.padding-bottom { padding-bottom: var(--newsletter-pad-bottom, 40px); }
 .store-buttons-pad.padding-top { padding-top: var(--store-buttons-pad-top, 40px); }
@@ -203,12 +253,17 @@ body.page-home .software-spacer { padding-top: calc(var(--spacer-pad-top, 80px) 
 .padding-bottom-25 { padding-bottom: 25px; }
 /* the spacer block's height (--spacer-pad-top) halves on mobile and the home
    page — the calc keeps that ratio when the site-wide option changes it */
-.software-spacer { padding-top: var(--spacer-pad-top, 80px); }
+/* a height set on the block is taken literally — it applies on phones and on
+   the home page as typed, and the "alt for mobile" field is how you get a
+   different one there. Only the site-wide default keeps the automatic halving. */
+.software-spacer { padding-top: var(--pad-top, var(--spacer-pad-top, 80px)); }
 @media (max-width: 767px) {
-  .software-spacer { padding-top: calc(var(--spacer-pad-top, 80px) / 2); }
+  .software-spacer, body.page-home .software-spacer {
+    padding-top: var(--pad-top-m, var(--pad-top, calc(var(--spacer-pad-top, 80px) / 2)));
+  }
   /* .cc zeroed this on mobile, leaving section rules flush against the
      first tile — keep a small gap instead */
-  .desktop-only-padding-top { padding-top: 20px !important; }
+  .desktop-only-padding-top { padding-top: var(--pad-bottom-m, var(--pad-bottom, 20px)) !important; }
 }
 .page-title { color: #fff; font-size: 1.4rem; font-weight: 400; line-height: 1.2; }
 .page-title--small { font-size: 1.15rem; }
@@ -329,6 +384,10 @@ body.page-brand-dark::before {
    .padding-top-r / .padding-bottom-25 are shared with the post grid and the
    store buttons; the two-class selectors beat them (and the mobile 10px)
    whatever the source order, so the mobile value is restated to keep it. */
+/* the post grid's "more posts" button: a section-level CTA under the cards, so
+   it takes its own air rather than the tighter spacing the card buttons use
+   inside a card */
+.grid-more { padding-top: var(--post-grid-more-pad-top, 25px); padding-bottom: var(--post-grid-more-pad-bottom, 10px); }
 .promo-btn--std.padding-bottom-25,
 .promo-btn--tight.padding-bottom-25 { padding-bottom: var(--promo-btn-pad-bottom, 20px); }
 .promo-btn--std.padding-top-r { padding-top: var(--promo-btn-pad-top, 15px); }
@@ -368,10 +427,15 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  /* the fade back to the still stays quick so a paused frame never lingers */
+  transition: opacity 0.4s ease;
   pointer-events: none;
 }
-.promo-video-hover:hover video, .promo-video-hover.playing video { opacity: 1; }
+.promo-video-hover:hover video, .promo-video-hover.playing video {
+  opacity: 1;
+  /* slow cross-fade from the still into motion */
+  transition: opacity 1.5s ease;
+}
 .promo-video-hover img { display: block; width: 100%; }
 /* per-tile "coming soon" corner badge over the image */
 .promo-soon-badge {
@@ -460,10 +524,16 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
 .feature-logo-large { max-width: min(760px, 100%); padding-bottom: 30px; }
 .feature-logo-extra-large { max-width: min(1100px, 100%); padding-bottom: 30px; }
 .logo-padding { padding-top: 30px; }
-/* the logo BLOCK's copy only (.logo-padding is shared with overlay-banner) */
-.logo-pad { padding-top: var(--logo-pad-top, 30px); }
+/* the logo BLOCK's copy only (.logo-padding is shared with overlay-banner).
+   Two classes deliberately: it has to outrank the .feature-logo-* bottom
+   padding, which is declared both above and inside the media query below. */
+.logo-pad.logo-padding { padding-top: var(--pad-top, var(--logo-pad-top, 30px)); padding-bottom: var(--pad-bottom, 30px); }
 @media (max-width: 767px) {
   .feature-logo-medium, .feature-logo-large, .feature-logo-extra-large { padding-left: 20px; padding-right: 20px; padding-bottom: 15px; }
+  .logo-pad.logo-padding {
+    padding-top: var(--pad-top-m, var(--pad-top, var(--logo-pad-top, 30px)));
+    padding-bottom: var(--pad-bottom-m, var(--pad-bottom, 15px));
+  }
 }
 /* Merriweather Sans, self-hosted — used by inline logo SVGs (CAPITALISM);
    browsers only download it on pages that actually use the family */
@@ -502,10 +572,17 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
 .article-set-title { font-size: 115%; font-weight: 400; line-height: 1.1; color: #fff; }
 /* a gallery rule with no title above it has no gap to hold open */
 .gallery-hr--bare { padding-top: 0; }
+/* "Space above the rule" is the rule's own top padding — .full-hr's 15px with a
+   title over it, nothing without. Both defaults stay put until the block sets
+   --rule-pad; the two-class selectors outrank .full-hr and .gallery-hr--bare. */
+.grid-intro-area .full-hr { padding-top: var(--rule-pad, 15px); }
+.grid-intro-area .full-hr.gallery-hr--bare { padding-top: var(--rule-pad, 0px); }
 .padding-15 { padding: 0 15px; }
 @media (max-width: 767px) {
   .padding-15 { padding-left: 20px; padding-right: 20px; }
   .article-set-title { font-size: 1rem; }
+  .grid-intro-area .full-hr { padding-top: var(--rule-pad-m, var(--rule-pad, 15px)); }
+  .grid-intro-area .full-hr.gallery-hr--bare { padding-top: var(--rule-pad-m, var(--rule-pad, 0px)); }
 }
 
 /* screenshot carousel (.cc slick-slider-single port): 4/3/2/1 thumbnails */
@@ -517,6 +594,19 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
 @media (max-width: 767px) { .article-slider-item { flex-basis: 50%; } }
 @media (max-width: 540px) { .article-slider-item { flex-basis: 100%; } }
 .grid-article-outline { border: 1px solid #8a9191; margin: 40px 0 30px; }
+/* the gallery's "Space below the rule" is that 40px top margin — the rule is a
+   sibling of the slider, so there's no shared box to pad. Scoped to the slider
+   so the option can't reach anything else that borrows the outline. */
+.article-slider .grid-article-outline {
+  margin-top: var(--pad-top, 40px);
+  margin-bottom: var(--pad-bottom, 30px);
+}
+@media (max-width: 767px) {
+  .article-slider .grid-article-outline {
+    margin-top: var(--pad-top-m, var(--pad-top, 40px));
+    margin-bottom: var(--pad-bottom-m, var(--pad-bottom, 30px));
+  }
+}
 .grid-article-outline:hover { box-shadow: 0 0 20px 5px rgba(119, 118, 118, 0.25); }
 .gridImage { max-width: 100%; margin: 0 auto; display: block; }
 .gridImage img { display: block; width: 100%; height: auto; cursor: zoom-in; }
@@ -567,9 +657,21 @@ html:has(.lightbox[open]) { overflow: hidden; }
 .lightbox-close:hover, .lightbox-close:focus { color: #bbb; outline: 0; }
 
 .steam-widget-wrap { padding-top: 25px; padding-bottom: 10px; text-align: center; }
-/* per-block copies of the shared wrap, so each widget tunes independently */
-.steam-pad { padding-top: var(--steam-widget-pad-top, 25px); padding-bottom: var(--steam-widget-pad-bottom, 10px); }
-.appstore-pad { padding-top: var(--appstore-widget-pad-top, 25px); padding-bottom: var(--appstore-widget-pad-bottom, 10px); }
+/* per-block copies of the shared wrap, so each widget tunes independently.
+   --pad-* is the block's own field, ahead of the site-wide globe value and
+   then the original default; the -m pair takes over under 768px. */
+.steam-pad { padding-top: var(--pad-top, var(--steam-widget-pad-top, 25px)); padding-bottom: var(--pad-bottom, var(--steam-widget-pad-bottom, 10px)); }
+.appstore-pad { padding-top: var(--pad-top, var(--appstore-widget-pad-top, 25px)); padding-bottom: var(--pad-bottom, var(--appstore-widget-pad-bottom, 10px)); }
+@media (max-width: 767px) {
+  .steam-pad {
+    padding-top: var(--pad-top-m, var(--pad-top, var(--steam-widget-pad-top, 25px)));
+    padding-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--steam-widget-pad-bottom, 10px)));
+  }
+  .appstore-pad {
+    padding-top: var(--pad-top-m, var(--pad-top, var(--appstore-widget-pad-top, 25px)));
+    padding-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--appstore-widget-pad-bottom, 10px)));
+  }
+}
 .steam-widget { display: block; width: 720px; max-width: 100%; height: 190px; border: 0; margin: 0 auto; }
 
 /* App Store widget: hand-built sibling of the Steam widget card */
@@ -687,26 +789,39 @@ html:has(.lightbox[open]) { overflow: hidden; }
   box-shadow: 0 1px 0 rgba(27, 31, 36, .1);
 }
 .github-widget:hover .ghw-btn { background: #1a7f37; }
-/* mobile: same horizontal layout as desktop/Steam, just scaled down */
+/* mobile: both cards wrap — icon + text up top, the pill and the action
+   (full-width green button / right-aligned badge) on a second row, so the
+   name and blurb keep the card's width (GitHub's own phone layout) */
 @media (max-width: 600px) {
-  .appstore-widget, .github-widget { gap: 12px; padding: 14px; }
+  .appstore-widget, .github-widget { gap: 12px; padding: 14px; flex-wrap: wrap; }
+  .appstore-widget .asw-info, .github-widget .asw-info { flex: 1 1 0; }
+  .appstore-widget .asw-get, .github-widget .asw-get {
+    flex: 1 1 100%;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
   .asw-icon, .ghw-icon { width: 64px; height: 64px; border-radius: 14px; }
   .asw-name, .ghw-name { font-size: 15px; margin-bottom: 4px; }
   .asw-blurb, .ghw-blurb {
-    font-size: 11px;
+    font-size: 12px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .asw-price { font-size: 12px; padding: 4px 10px; margin-bottom: 6px; }
-  .ghw-tag { font-size: 11px; padding: 2px 8px; margin-bottom: 6px; }
-  .ghw-btn { font-size: 12px; padding: 5px 10px; }
-  .ghw-name { font-size: 14px; gap: 6px; }
+  /* price rides on the badge's left, the pair hugging the right edge */
+  .appstore-widget .asw-get { justify-content: flex-end; }
+  .asw-price { font-size: 12px; padding: 4px 10px; margin-bottom: 0; flex: none; }
+  .asw-badge { height: 34px; }
+  .ghw-tag { font-size: 11px; padding: 3px 10px; margin-bottom: 0; flex: none; }
+  .ghw-btn { font-size: 13px; padding: 6px 12px; flex: 1; }
+  /* a long name keeps its own line and the suffix wraps under it */
+  .ghw-name { font-size: 14px; gap: 6px; flex-wrap: wrap; row-gap: 2px; }
   .ghw-mark { width: 16px; height: 16px; }
   .ghw-name-suffix { font-size: 12px; }
   .ghw-icon { border-radius: 8px; }
-  .asw-badge { height: 30px; }
 }
 
 /* per-page accents */
