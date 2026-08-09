@@ -244,13 +244,18 @@ body.page-home .software-spacer { padding-top: var(--pad-top, calc(var(--spacer-
    --pad-top / --pad-bottom, plus the --pad-top-m / --pad-bottom-m pair when
    "alt padding for mobile" is ticked. Custom properties rather than plain
    padding because the phone value needs a media query, which an inline style
-   can't carry. Each var() nests: block mobile → block desktop → site-wide → the
-   original hardcoded value. */
+   can't carry. Each var() nests: block mobile → block desktop → site-wide
+   mobile → site-wide desktop → the hardcoded default.
+   The phone default is its own number, not the desktop one: every mobile value
+   typed across the site was smaller than the 40 it replaced, so 40/40 becomes
+   25/30 here and the desktop rule above keeps its 40s. A site-wide desktop
+   value still carries to phones — it sits later in the same chain — so the
+   globe panel behaves as it always did unless its mobile field is filled in. */
 .text-pad.padding-top { padding-top: var(--pad-top, var(--text-pad-top, 40px)); }
 .text-pad.padding-bottom { padding-bottom: var(--pad-bottom, var(--text-pad-bottom, 40px)); }
 @media (max-width: 767px) {
-  .text-pad.padding-top { padding-top: var(--pad-top-m, var(--pad-top, var(--text-pad-top, 40px))); }
-  .text-pad.padding-bottom { padding-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--text-pad-bottom, 40px))); }
+  .text-pad.padding-top { padding-top: var(--pad-top-m, var(--pad-top, var(--text-pad-top-m, var(--text-pad-top, 25px)))); }
+  .text-pad.padding-bottom { padding-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--text-pad-bottom-m, var(--text-pad-bottom, 30px)))); }
 }
 .newsletter-pad.padding-top { padding-top: var(--newsletter-pad-top, 40px); }
 .newsletter-pad.padding-bottom { padding-bottom: var(--newsletter-pad-bottom, 40px); }
@@ -583,12 +588,13 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
 }
 /* full-bleed decorative strip (.cc Animal Maker bg-block-row); the 30px below
    it is the default the block's padding fields override, and the mobile pair
-   lets a phone close that gap without touching desktop */
-.block-background { padding-top: var(--pad-top, 0); padding-bottom: var(--pad-bottom, 30px); overflow: hidden; }
+   lets a phone close that gap without touching desktop — 20px there, which is
+   what the one strip on the site had been overriding it to */
+.block-background { padding-top: var(--pad-top, 0); padding-bottom: var(--pad-bottom, var(--background-strip-pad-bottom, 30px)); overflow: hidden; }
 @media (max-width: 767px) {
   .block-background {
     padding-top: var(--pad-top-m, var(--pad-top, 0));
-    padding-bottom: var(--pad-bottom-m, var(--pad-bottom, 30px));
+    padding-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--background-strip-pad-bottom-m, var(--background-strip-pad-bottom, 20px))));
   }
 }
 .block-background-image { display: block; width: 100%; height: auto; object-fit: cover; object-position: left center; }
@@ -668,15 +674,19 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
 .grid-article-outline { border: 1px solid #8a9191; margin: 40px 0 30px; }
 /* the gallery's "Space below the rule" is that 40px top margin — the rule is a
    sibling of the slider, so there's no shared box to pad. Scoped to the slider
-   so the option can't reach anything else that borrows the outline. */
+   so the option can't reach anything else that borrows the outline.
+   Every gallery on the site set both phone values and neither desktop one, so
+   the phone defaults are 20 above and 0 below. Zero is safe because whatever
+   follows a gallery brings its own top padding (widgets 25, newsletter 40) —
+   the outline's border stops the margins collapsing through it either way. */
 .article-slider .grid-article-outline {
-  margin-top: var(--pad-top, 40px);
-  margin-bottom: var(--pad-bottom, 30px);
+  margin-top: var(--pad-top, var(--gallery-pad-top, 40px));
+  margin-bottom: var(--pad-bottom, var(--gallery-pad-bottom, 30px));
 }
 @media (max-width: 767px) {
   .article-slider .grid-article-outline {
-    margin-top: var(--pad-top-m, var(--pad-top, 40px));
-    margin-bottom: var(--pad-bottom-m, var(--pad-bottom, 30px));
+    margin-top: var(--pad-top-m, var(--pad-top, var(--gallery-pad-top-m, var(--gallery-pad-top, 20px))));
+    margin-bottom: var(--pad-bottom-m, var(--pad-bottom, var(--gallery-pad-bottom-m, var(--gallery-pad-bottom, 0px))));
   }
 }
 .grid-article-outline:hover { box-shadow: 0 0 20px 5px rgba(119, 118, 118, 0.25); }
