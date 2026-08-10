@@ -328,8 +328,19 @@ body.page-brand-dark::before {
     radial-gradient(circle at 12% 70%, rgba(240, 110, 240, .09), transparent 55%),
     linear-gradient(180deg, #0d0d14, #030306);
 }
-/* optional lighter line under the page title */
-.text-block .page-subtitle { color: #bbb; font-size: 1rem; font-weight: 200; margin: 0 0 1em; margin-top: var(--page-title-sub-gap, 0.5em); }
+/* optional lighter line under the page title. Its old 1em bottom margin has
+   moved onto the rule below (see .page-title-hr--sub) so one field controls
+   the whole gap; it started at 16px + 15px = 31px and now defaults to 30. */
+.text-block .page-subtitle { color: #bbb; font-size: 1rem; font-weight: 200; margin: 0; margin-top: var(--page-title-sub-gap, 0.5em); }
+/* page title → rule: the block's "Text to line gap" (--rule-gap) is the whole
+   visible space, which is why the subheading variant defaults to 30 rather
+   than the bare rule's 15 */
+.page-title-hr { padding-top: var(--rule-gap, var(--page-title-rule-gap, 15px)); }
+.page-title-hr--sub { padding-top: var(--rule-gap, var(--page-title-rule-gap-sub, 30px)); }
+@media (max-width: 767px) {
+  .page-title-hr { padding-top: var(--rule-gap-m, var(--rule-gap, var(--page-title-rule-gap, 15px))); }
+  .page-title-hr--sub { padding-top: var(--rule-gap-m, var(--rule-gap, var(--page-title-rule-gap-sub, 30px))); }
+}
 /* subheading block: the page-title treatment at section scale (h3).
    colour is class-only specificity so .page-light h3 still wins on light pages;
    top padding is a site-wide block option like the page title's */

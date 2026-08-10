@@ -26,7 +26,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    # public site repos publish from main OR master (audiotheory.co uses master)
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
