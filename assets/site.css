@@ -528,7 +528,17 @@ body.page-light .promo-grid--outlined { --promo-card-border: rgba(0, 0, 0, .16);
 /* hover darkens the page's own button colour (--mc) by a fixed ratio —
    #715f95 lands on the old hardcoded #503e73, so default pages look unchanged */
 .mc-button:hover { background: color-mix(in srgb, var(--mc, #715f95) 71%, black); }
+.mc-button:disabled { opacity: .6; cursor: default; }
 .nl-hp { position: absolute; left: -5000px; }
+.nl-msg { margin: 0 0 25px; font-weight: 700; }
+.nl-msg[hidden] { display: none; }
+.nl-msg-error { color: #e08a8a; }
+.page-light .nl-msg-error { color: #b04a4a; }
+/* interaction-only Turnstile is invisible but still reserves ~72px once its
+   script renders — keep the box collapsed until Cloudflare actually needs to
+   show a challenge (site.js adds .cf-turnstile-show via its callback) */
+.cf-turnstile { height: 0; overflow: hidden; }
+.cf-turnstile-show { height: auto; overflow: visible; margin-bottom: 17px; }
 
 /* ---------- footer: shared rules live in footer.css ---------- */
 .dc-footer { font: inherit; }

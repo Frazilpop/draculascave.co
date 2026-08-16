@@ -19,7 +19,9 @@
 .dc-socials img { height: 24px; width: auto; display: block; opacity: 0.85; }
 .dc-socials a:first-child img { height: 20px; } /* YouTube glyph is optically wide */
 .dc-socials a:hover img { opacity: 1; }
-.dc-copy { color: rgba(255, 255, 255, 0.65); font-weight: 200; font-size: 0.85rem; }
+/* 0.875rem = 14px, the same size as the links: the row centres boxes, not
+   baselines, so a smaller copy would ride ~0.5px above the links' baseline */
+.dc-copy { color: rgba(255, 255, 255, 0.65); font-weight: 200; font-size: 0.875rem; }
 @media (max-width: 767px) {
   .dc-footer-row { justify-content: center; }
   .dc-footer-right { order: 1; flex-basis: 100%; }

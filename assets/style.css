@@ -271,8 +271,10 @@ h2.title, h2.title a { font-size: 24px; }
 .widget p { margin-bottom: 12px; }
 .widget img { max-width: 100%; height: auto; }
 
-/* the Lion Quest Infinity promo stack with the little Dracula */
-.lqi-promo { position: relative; left: 0; top: 0; }
+/* the Lion Quest Infinity promo stack with the little Dracula.
+   Every piece is 200px wide and composed vertically; the cap keeps the
+   banner wrapping under the gif when the sidebar is full-width (mobile) */
+.lqi-promo { position: relative; left: 0; top: 0; max-width: 200px; }
 .lqi-promo img.lqi-main { max-width: 200px; height: auto; }
 .lqi-promo img.lqi-banner { position: relative; bottom: 10px; }
 .lqi-promo img.lqi-ground { position: absolute; bottom: -10px; left: 0; }
@@ -292,8 +294,14 @@ h2.title, h2.title a { font-size: 24px; }
 
 /* ---------- small screens ---------- */
 @media (max-width: 760px) {
-  .main-wrap { flex-direction: column; }
-  #sidebar { width: 100%; }
+  /* stacked layout: the last post box's own 40px margin already separates it
+     from the sidebar, so the flex gap and content padding would triple it */
+  .main-wrap { flex-direction: column; gap: 0; }
+  #content { padding-bottom: 0; }
+  /* same doubling before the footer: drop the sidebar padding and give the
+     last widget the page's standard 40px instead of its usual 35px */
+  #sidebar { width: 100%; padding-bottom: 0; }
+  #sidebar .widget:last-child { margin-bottom: 40px; }
   .post .title, .post .title a { font-size: 24px; }
 }
 

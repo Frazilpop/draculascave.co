@@ -126,4 +126,74 @@ if (galleryImgs.length) {
     });
   });
 }
+
+// ---------- newsletter signup (first-party capture worker) ----------
+// Submits in the background and swaps the form for an inline thanks. The
+// Turnstile spam-check script only loads once someone focuses the email box,
+// so pages stay light. With JS off the form still POSTs natively and the
+// worker bounces back to /?subscribed=…, which the load-time check renders.
+// Turnstile calls this (data-before-interactive-callback) when it needs to
+// show a visible challenge — until then CSS keeps its box collapsed.
+window.dcmsxTurnstileInteractive = () => {
+  document.querySelectorAll('.cf-turnstile').forEach((el) => el.classList.add('cf-turnstile-show'));
+};
+document.querySelectorAll('form[data-newsletter]').forEach((form) => {
+  if (bound.has(form)) return;
+  bound.add(form);
+  const msg = form.querySelector('.nl-msg');
+  const show = (text, isError) => {
+    if (!msg) return;
+    msg.hidden = false;
+    msg.textContent = text;
+    msg.classList.toggle('nl-msg-error', !!isError);
+  };
+  const done = () => {
+    form.querySelectorAll('.sign-up-box, .mc-button, .cf-turnstile')
+      .forEach((el) => { el.style.display = 'none'; });
+    show('Thank you – your details have been received');
+  };
+  if (/[?&]subscribed=1\b/.test(location.search)) return done();
+  if (/[?&]subscribed=error\b/.test(location.search)) {
+    show('Something went wrong — please try signing up again.', true);
+  }
+  const loadTurnstile = () => {
+    if (!form.querySelector('.cf-turnstile')) return;
+    if (document.querySelector('script[src*="challenges.cloudflare.com/turnstile"]')) return;
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true;
+    document.head.appendChild(s);
+  };
+  const email = form.querySelector('input[type="email"]');
+  if (email) email.addEventListener('focus', loadTurnstile, { once: true });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    loadTurnstile();
+    const needsToken = !!form.querySelector('.cf-turnstile');
+    let tries = 0;
+    const attempt = () => {
+      // the invisible check may still be running — wait for its token
+      const token = form.querySelector('[name="cf-turnstile-response"]');
+      if (needsToken && !(token && token.value)) {
+        if (++tries > 40) return show('Couldn’t run the spam check — please reload and try again.', true);
+        show('Checking…');
+        return setTimeout(attempt, 250);
+      }
+      const button = form.querySelector('.mc-button');
+      if (button) button.disabled = true;
+      const data = new URLSearchParams(new FormData(form));
+      data.set('source', location.origin + location.pathname);
+      data.set('js', '1');
+      fetch(form.action, { method: 'POST', body: data })
+        .then((r) => r.json())
+        .then((j) => {
+          if (j.ok) return done();
+          show(j.error || 'Something went wrong — please try again.', true);
+          if (button) button.disabled = false;
+        })
+        .catch(() => form.submit()); // fetch blocked → native POST
+    };
+    attempt();
+  });
+});
 })();

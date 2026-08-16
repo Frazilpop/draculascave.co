@@ -93,12 +93,15 @@
 <div class="padded-container steam-widget-wrap steam-pad"><iframe class="steam-widget" src="https://store.steampowered.com/widget/1384530/" title="Steam store widget" loading="lazy"></iframe></div>
 <div class="align-center-d text-block newsletter-pad padding-top padding-bottom desktop-only-padding-top" style="--mc:#5cb6e2">
 <div class="outline-sign-up-box">
-    <form action="https://draculascave.us17.list-manage.com/subscribe/post?u=a4382a8b7697b7be117b2c54b&amp;id=4eeee0350e" method="post" target="_blank" novalidate>
+    <form action="https://dcmsx-email.frazilpop.workers.dev/subscribe" method="post" data-newsletter>
         <div class="newsletter-title-b">SUBSCRIBE</div>
         <div class="newsletter-sub-title">Join the Dracula’s Cave mailing list and receive updates on our upcoming games and software delivered straight to your inbox.</div>
+        <input type="hidden" name="list" value="draculascave">
         <input type="email" value="" placeholder="email address" name="EMAIL" class="sign-up-box" required aria-label="Email address">
-        <div class="nl-hp" aria-hidden="true"><input type="text" name="b_041f1906c569d3ecba6aa5ea8_e30dee0a93" tabindex="-1" value=""></div>
+        <div class="nl-hp" aria-hidden="true"><input type="text" name="nickname" tabindex="-1" value=""></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAERk6eXkn6L4J6c1" data-appearance="interaction-only" data-size="flexible" data-before-interactive-callback="dcmsxTurnstileInteractive"></div>
         <input type="submit" value="Subscribe" name="subscribe" class="mc-button">
+        <div class="nl-msg" hidden></div>
     </form>
 </div>
 </div>
