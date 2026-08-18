@@ -44,9 +44,19 @@ a:hover { text-decoration: underline; }
 #branding img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
 
 /* ---------- layout ---------- */
-.main-wrap { display: flex; gap: 40px; align-items: flex-start; }
-#content { flex: 1; min-width: 0; padding-bottom: 40px; }
-#sidebar { width: 220px; flex-shrink: 0; padding-bottom: 40px; }
+/* The gap between the masthead logo and the top of the white box. It is
+   .banner-logo's bottom padding, which header.css hangs on the site-wide
+   --banner-logo-pad-bottom (block-styles.yml) shared with the hub pages — so the
+   blog gets its own knob in front of it rather than moving everyone's. Scoped to
+   body.page-blog for two reasons: it out-specifies header.css's own
+   single-class rule whatever the load order, and it keeps site pages on the
+   shared value. header.css's mobile rule is body:not(.page-blog), so the blog
+   uses this one at both sizes. Blank falls through to the site-wide default. */
+body.page-blog .banner-logo { padding-bottom: var(--blog-logo-gap, var(--banner-logo-pad-bottom, 5px)); }
+
+.main-wrap { display: flex; gap: var(--blog-column-gap, 40px); align-items: flex-start; }
+#content { flex: 1; min-width: 0; padding-bottom: var(--blog-column-pad, 40px); }
+#sidebar { width: var(--blog-sidebar-width, 220px); flex-shrink: 0; padding-bottom: var(--blog-column-pad, 40px); }
 
 /* ---------- posts ---------- */
 /* each article sits in its own white box, as in the original theme */
@@ -54,8 +64,8 @@ a:hover { text-decoration: underline; }
   background: var(--surface);
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 20px;
-  margin-bottom: 40px;
+  padding: var(--blog-post-pad, 20px);
+  margin-bottom: var(--blog-post-gap, 40px);
 }
 
 .post .title, .post .title a {
@@ -189,8 +199,8 @@ h2.title, h2.title a { font-size: 24px; }
   background: var(--surface);
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 12px 20px;
-  margin-bottom: 40px;
+  padding: var(--blog-nav-pad-y, 12px) var(--blog-nav-pad-x, 20px);
+  margin-bottom: var(--blog-nav-gap, 40px);
   font-size: var(--text-md);
 }
 .post-nav-next { text-align: right; }
@@ -223,10 +233,14 @@ h2.title, h2.title a { font-size: 24px; }
 .post-list li { padding: 6px 0; border-bottom: 1px dotted var(--rule); display: flex; gap: 15px; }
 .post-list .pl-date { color: var(--muted); font-size: var(--text-sm); white-space: nowrap; width: 85px; flex-shrink: 0; padding-top: 2px; }
 
-.pagination { display: flex; justify-content: space-between; margin-bottom: 40px; }
+.pagination { display: flex; justify-content: space-between; margin-bottom: var(--blog-pager-gap, 40px); }
 
 /* ---------- sidebar ---------- */
-.widget { margin-bottom: 35px; font-size: var(--text-md); }
+.widget { margin-bottom: var(--w-gap, var(--blog-widget-gap, 35px)); font-size: var(--text-md); }
+/* the gap that ends the column, before the footer. Its own value because it is
+   the only one that reads against the footer rather than another widget; the
+   fallback chain keeps a per-widget setting winning if one is set. */
+#sidebar .widget:last-child { margin-bottom: var(--blog-last-widget-gap, var(--w-gap, var(--blog-widget-gap, 35px))); }
 
 .search-form { display: flex; gap: 6px; }
 .search-form input {
@@ -263,8 +277,8 @@ h2.title, h2.title a { font-size: 24px; }
   /* embossed divider, replicating the theme's indentline.png */
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-  padding: 0 0 15px;
-  margin: 0 0 10px;
+  padding: 0 0 var(--blog-heading-rule-gap, 15px);
+  margin: 0 0 var(--blog-heading-gap, 10px);
 }
 .widget ul { list-style: none; }
 .widget ul li { padding: 4px 0; border-bottom: 1px dotted var(--rule); }
@@ -281,6 +295,10 @@ h2.title, h2.title a { font-size: 24px; }
 .lqi-promo img.lqi-dracula { position: absolute; bottom: -10px; left: 150px; }
 .lqi-promo img.lqi-front { position: absolute; bottom: -10px; left: 0; }
 
+/* The phone-only game cards that take this stack's place below 760px live in
+   their own side-promos.css — the Universal blocks preview needs them on the
+   site skin too, where style.css cannot go. */
+
 /* ---------- footer ---------- */
 #colophon {
   background: #dedede;
@@ -292,17 +310,52 @@ h2.title, h2.title a { font-size: 24px; }
 }
 #colophon a { color: var(--soft); }
 
+/* The About widget's optional phone-specific prose (Blog content → Sidebar
+   widgets → About). Only one of the pair is ever in the page; with no phone
+   version set, a single unclassed <p> ships and neither rule applies. */
+.about-mobile { display: none; }
+
 /* ---------- small screens ---------- */
 @media (max-width: 760px) {
-  /* stacked layout: the last post box's own 40px margin already separates it
-     from the sidebar, so the flex gap and content padding would triple it */
+  /* stacked layout: the last box's own bottom margin already separates it from
+     the sidebar, so a flex gap and content padding on top would treble it */
   .main-wrap { flex-direction: column; gap: 0; }
+  /* the LQI promo is a fixed 200px composition (the layers are positioned
+     against that width, so it can't be scaled): in a full-width sidebar it
+     strands itself in the left half. The cards above take over here. */
+  .lqi-promo { display: none; }
+  /* the prose swaps with the artwork below it, on the same line */
+  .about-desktop { display: none; }
+  .about-mobile { display: block; }
   #content { padding-bottom: 0; }
-  /* same doubling before the footer: drop the sidebar padding and give the
-     last widget the page's standard 40px instead of its usual 35px */
   #sidebar { width: 100%; padding-bottom: 0; }
-  #sidebar .widget:last-child { margin-bottom: 40px; }
   .post .title, .post .title a { font-size: 24px; }
+
+  /* Tighter vertical rhythm. The desktop values (40px between boxes, 35px
+     between widgets) are doing two different jobs: beside the post they
+     separate a narrow 220px column from the article, but stacked full width
+     they are just gaps in one long single-file run, and the tail of a post
+     reads as dead space. The same order is kept — boxes apart by more than
+     widgets, and a wider breath before the footer so the column still ends
+     deliberately rather than just stopping. */
+  /* Phone values, each falling through to its desktop twin: a blank -m field
+     means "same as desktop", the convention BLOCK_GLOBALS uses site-wide. The
+     numbers the blog actually runs at live in blog-spacing.yml, not here; these
+     tails are only what applies if every field were cleared. */
+  body.page-blog .banner-logo { padding-bottom: var(--blog-logo-gap-m, var(--blog-logo-gap, var(--banner-logo-pad-bottom, 5px))); }
+  .post { margin-bottom: var(--blog-post-gap-m, var(--blog-post-gap, 40px)); padding: var(--blog-post-pad-m, var(--blog-post-pad, 20px)); }
+  .post-nav { margin-bottom: var(--blog-nav-gap-m, var(--blog-nav-gap, 40px)); padding: var(--blog-nav-pad-y-m, var(--blog-nav-pad-y, 12px)) var(--blog-nav-pad-x-m, var(--blog-nav-pad-x, 20px)); }
+  /* per-widget beats the block default beats the built-in, phone before desktop
+     at each level. The Archive / RSS pair used to be a :has() special case here;
+     it is now just a widget with its own gap set (Blog content → Sidebar
+     widgets → Buttons), the same thing said as data instead of a rule. */
+  .widget { margin-bottom: var(--w-gap-m, var(--w-gap, var(--blog-widget-gap-m, var(--blog-widget-gap, 35px)))); }
+  /* the sidebar's own bottom padding is dropped above, so the last widget
+     carries the whole gap down to the footer itself */
+  #sidebar .widget:last-child { margin-bottom: var(--blog-last-widget-gap-m, var(--blog-last-widget-gap, var(--w-gap-m, var(--w-gap, var(--blog-widget-gap-m, var(--blog-widget-gap, 35px)))))); }
+  /* the listing's pager sits where .post-nav does on a post */
+  .pagination { margin-bottom: var(--blog-pager-gap-m, var(--blog-pager-gap, 40px)); }
+  .widget h3 { padding-bottom: var(--blog-heading-rule-gap-m, var(--blog-heading-rule-gap, 15px)); margin-bottom: var(--blog-heading-gap-m, var(--blog-heading-gap, 10px)); }
 }
 
 /* sidebar Archive / RSS buttons (the unified header no longer carries them) */

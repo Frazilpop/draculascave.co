@@ -7,6 +7,7 @@
 <meta name="description" content="Ys: Memories of Celceta reminded me why I love RPGs, and how well suited they are to handheld consoles. It's a genre that thrived on the PSP, but is still…">
 <link rel="canonical" href="https://draculascave.co/2014/01/26/review-ys-memories-of-celceta/">
 <style>:root{--banner-logo-pad-bottom:20px;--mobile-logo-pad-top:5px}</style>
+<style>:root{--blog-logo-gap:20px;--blog-logo-gap-m:5px;--blog-post-gap:40px;--blog-post-gap-m:20px;--blog-post-pad:20px;--blog-nav-gap:40px;--blog-nav-gap-m:20px;--blog-nav-pad-y:12px;--blog-nav-pad-x:20px;--blog-pager-gap:40px;--blog-pager-gap-m:20px;--blog-widget-gap:35px;--blog-widget-gap-m:16px;--blog-last-widget-gap:35px;--blog-last-widget-gap-m:26px;--blog-heading-gap:10px;--blog-heading-rule-gap:15px;--blog-column-gap:40px;--blog-column-pad:40px;--blog-sidebar-width:220px;--blog-promo-gap:20px;--blog-promo-gap-two:16px}</style>
 <meta property="og:site_name" content="Dracula's Cave">
 <meta property="og:title" content="Review: Ys: Memories of Celceta">
 <meta property="og:type" content="article">
@@ -20,6 +21,7 @@
 <link rel="stylesheet" href="/assets/style.css">
 <link rel="stylesheet" href="/assets/header.css">
 <link rel="stylesheet" href="/assets/footer.css">
+<link rel="stylesheet" href="/assets/side-promos.css">
 </head>
 <body class="page-light has-banner-logo page-blog">
 
@@ -75,24 +77,27 @@
 
   </main>
 
+  <!-- widgets come from content/universal/blog-sidebar.yml (DCMSX → Blog
+       content), rendered by lib/universal.js renderBlogSidebar -->
   <aside id="sidebar">
     <div class="widget">
       <form class="search-form" action="/search/" method="get">
-        <input type="search" name="q" placeholder="Search&hellip;" aria-label="Search Dracula's Cave">
+        <input type="search" name="q" placeholder="Search…" aria-label="Search Dracula's Cave">
         <button type="submit">Search</button>
       </form>
     </div>
 
-    <div class="widget">
+    <div class="widget" style="--w-gap-m:22px">
       <div class="side-buttons">
         <a href="/archive/">Archive</a>
         <a href="/feed.xml">RSS Feed</a>
       </div>
     </div>
 
-    <div class="widget">
-      <h3>About Dracula&rsquo;s Cave</h3>
-      <p>I make games and talk about them too. Lion Quest Infinity, a game by Dracula&rsquo;s Cave, is available on <a href="https://store.steampowered.com/app/1384530">Steam</a>.</p>
+    <div class="widget" style="--w-gap-m:28px">
+      <h3>About Dracula’s Cave</h3>
+      <p class="about-desktop">I make games and talk about them too. Lion Quest Infinity, a game by Dracula’s Cave, is available on <a href="https://store.steampowered.com/app/1384530">Steam</a>.</p>
+      <p class="about-mobile">Dracula's Cave makes games as well as taking about them. Here's what we've been up to recently:</p>
       <div class="lqi-promo">
         <a href="https://store.steampowered.com/app/1384530">
           <img class="lqi-main" src="/wp-content/uploads/2021/03/lqi.gif" alt="Lion Quest Infinity"></a>
@@ -101,9 +106,22 @@
         <a href="https://store.steampowered.com/app/1384530"><img class="lqi-dracula" src="/wp-content/uploads/2016/07/dc.gif" alt=""></a>
         <a href="https://store.steampowered.com/app/1384530"><img class="lqi-front" src="/wp-content/uploads/2016/07/3.png" alt=""></a>
       </div>
+      <div class="side-promos">
+      <a class="side-promo" href="/games/the-wizard-of-gloss/">
+        <img src="/media/site/home/16-9-banner.jpg" alt="The Wizard of Gloss" loading="lazy">
+        <span class="sp-soon">Coming soon</span>
+        <span class="sp-name"><strong>The Wizard of Gloss</strong> &ndash; a PSX-style metroidvania with horror elements.</span>
+        <span class="sp-cta">Find out more</span>
+      </a>
+      <a class="side-promo" href="/games/lion-quest-infinity/">
+        <img src="/media/site/home/lion-quest-infinity-banner.jpg" alt="Lion Quest Infinity" loading="lazy">
+        <span class="sp-name"><strong>Lion Quest Infinity</strong> &ndash; steal a magic grandfather clock in this unforgettable adventure.</span>
+        <span class="sp-cta">Find out more</span>
+      </a>
+    </div>
     </div>
 
-    <div class="widget">
+    <div class="widget" style="--w-gap-m:18px">
       <h3>Categories</h3>
       <ul>
         <li><a href="/category/anime-reviews/">Anime Reviews</a> (36)</li>

@@ -1,0 +1,91 @@
+/* Dracula's Cave — the blog's promo cards (content/universal/blog-promos.yml,
+   rendered by lib/universal.js renderBlogPromos).
+
+   Its own file for the same reason header.css and footer.css are: two skins
+   need it. The blog loads it alongside style.css, and the Universal blocks
+   editor's /__universal/ preview page loads it on the site skin — where
+   style.css cannot go, since its body rules would repaint that page.
+
+   Phone-only, and the class names predate that being clear: they live in
+   #sidebar, but below 760px that column stacks under the article, so what a
+   reader sees is cards under the post, not a sidebar. Below 760px they take the
+   place of the Lion Quest Infinity stack (.lqi-promo in style.css), a fixed
+   200px composition built for the 220px desktop column that strands itself in
+   a full-width one.
+
+   This is the homepage promo card at sidebar scale, rebuilt rather than pulled
+   in from site.css: that stylesheet repaints .page-light bodies, so loading it
+   would restyle the blog. The values are its card's — the #232327 `card: dark`
+   tint, the light-page hairline and the compact CTA. Depends on tokens.css for
+   --text-base, which both skins already load (as header.css does). Nunito is
+   likewise already there, so naming it costs no extra font request. */
+
+.side-promos { display: grid; gap: var(--blog-promo-gap, 20px); }
+.side-promo {
+  /* a column, so two cards side by side (below) can differ in blurb length and
+     still line their CTAs up on the same baseline — .sp-name takes the slack */
+  display: flex;
+  flex-direction: column;
+  /* the positioning context for .sp-soon. The card itself rather than a wrapper
+     round the image: the image is always the first child and full width, so the
+     card's top-right corner IS the image's, and no extra element is needed. */
+  position: relative;
+  background: #232327;
+  border: 1px solid rgba(0, 0, 0, .16);
+  box-shadow: 5px 5px 8px 0 rgba(22, 22, 22, .25), 0 6px 20px 0 rgba(22, 22, 22, .19);
+  font-family: 'Nunito', Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+/* The whole tile is one link, so its colour and underline both have to go.
+   :link/:visited to outrank style.css's a:link, a:visited, and the underline is
+   killed in every state rather than just on hover: site.css sets no blanket
+   a { text-decoration: none }, so on that skin — the Universal blocks preview —
+   the browser default would otherwise underline the card's wording. */
+.side-promo, .side-promo:link, .side-promo:visited { color: #fff; text-decoration: none; }
+.side-promo:hover, .side-promo:focus { text-decoration: none; }
+.side-promo img { display: block; width: 100%; height: auto; }
+.side-promo .sp-name { flex: 1; padding: 14px 20px 0; font-size: var(--text-base); line-height: 1.45; }
+.side-promo .sp-cta {
+  align-self: center; /* a flex item would otherwise stretch the full width */
+  margin: 14px 0 20px;
+  padding: 7px 26px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.side-promo:hover .sp-cta { background: #292739; } /* site.css's .home-button:hover */
+
+/* "Coming soon" corner badge over the image, the same treatment as the homepage
+   grid's .promo-soon-badge (site.css). Its own class rather than that name: the
+   blog never loads site.css, and two rules for one class name in two
+   stylesheets is exactly the drift this file was split out to avoid. Helvetica
+   on purpose — the badge is chrome, not the card's Nunito wording. */
+.sp-soon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background: rgba(139, 0, 0, .9);
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 1px;
+  color: #fff;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+/* Landscape phones and small tablets: the sidebar is still full width there, so
+   one card per row reaches 730px at the breakpoint and dwarfs everything around
+   it. Two across keeps each card near the ~360px a portrait phone gives it. */
+@media (min-width: 540px) and (max-width: 760px) {
+  .side-promos { grid-template-columns: 1fr 1fr; gap: var(--blog-promo-gap-two, var(--blog-promo-gap, 20px)); }
+  .side-promo .sp-name { padding-left: 14px; padding-right: 14px; }
+}
+/* the LQI stack owns the desktop sidebar. display:none plus the images'
+   loading="lazy" means a desktop visitor never downloads the banners at all. */
+@media (min-width: 761px) { .side-promos { display: none; } }
