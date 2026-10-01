@@ -9,6 +9,10 @@
 <style>:root{--banner-logo-pad-bottom:20px;--mobile-logo-pad-top:5px}</style>
 <style>:root{--blog-logo-gap:20px;--blog-logo-gap-m:5px;--blog-post-gap:20px;--blog-post-gap-m:20px;--blog-post-pad:20px;--blog-nav-gap:0px;--blog-nav-gap-m:20px;--blog-nav-pad-y:12px;--blog-nav-pad-x:20px;--blog-pager-gap:40px;--blog-pager-gap-m:20px;--blog-widget-gap:35px;--blog-widget-gap-m:16px;--blog-last-widget-gap:35px;--blog-last-widget-gap-m:26px;--blog-heading-gap:10px;--blog-heading-rule-gap:15px;--blog-column-gap:40px;--blog-column-pad:40px;--blog-sidebar-width:220px;--blog-promo-gap:20px;--blog-promo-gap-two:16px}</style>
 
+<meta property="og:image" content="https://draculascave.co/assets/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="application/rss+xml" title="Dracula's Cave &raquo; Feed" href="https://draculascave.co/feed.xml">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="stylesheet" href="/assets/style.css">
@@ -40,7 +44,18 @@
 
 <div class="container main-wrap">
   <main id="content">
-<article class="post"><h1 class="title">404: Lost in the cave</h1><div class="entry"><p>This page has vanished like a vampire at sunrise. Try the <a href="/archive/">archive</a> or head <a href="/">back home</a>.</p></div></article>
+<script>(function () {
+  var p = location.pathname, m, to = null;
+  try { p = decodeURIComponent(p); } catch (e) {}
+  if ((m = p.match(/^(\/\d{4}\/\d\d\/\d\d\/[^/]+\/).+/))) to = m[1];
+  else if ((m = p.match(/^\/(tag|category)\/([^/]+)\/page\/\d+/))) to = '/' + m[1] + '/' + m[2] + '/';
+  else if ((m = p.match(/^\/category\/(.+)-\d+\/?$/))) to = '/category/' + m[1] + '/';
+  else if ((m = p.match(/^\/(\d{4})(\/\d\d)?(\/page\/\d+)?\/?$/))) to = '/archive/#y' + m[1];
+  else if ((m = p.match(/^\/tag\/([^/]+)/))) to = '/search/?q=' + encodeURIComponent(m[1].replace(/-/g, ' '));
+  else if (/^\/(category|author|page)\//.test(p)) to = '/blog/';
+  if (to) { window.goatcounter = { no_onload: true }; location.replace(to); }
+  else window.goatcounter = { path: '/404' + location.pathname };
+})();</script><article class="post"><h1 class="title">404: Lost in the cave</h1><div class="entry"><p>This page has vanished like a vampire at sunrise. Try the <a href="/archive/">archive</a> or head <a href="/">back home</a>.</p></div></article>
   </main>
 
   <!-- widgets come from content/universal/blog-sidebar.yml (DCMSX → Blog
