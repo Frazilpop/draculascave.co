@@ -27,6 +27,7 @@ Dracula's Cave is the personal site of DiscoDracula — indie games, software an
 
 - [CLInt](https://draculascave.co/software/clint/): CLInt is a free full-screen launcher for games and videos on Windows. Fast, controller-first and open source — he scans your Steam library, plays your videos and remembers where you stopped.
 - [Local Music Player Privacy Policy](https://draculascave.co/software/local-music-player/privacy/): Local Music Player's privacy policy — the app collects nothing, sends nothing to its developer, and plays only the music on your device.
+- [Local Music Player](https://draculascave.co/software/local-music-player/): Local Music Player plays the music that's actually on your iPhone or iPad – shelves, a Now Playing bar and the full player, in the spirit of the old Music app. No Apple Music, no streaming, no accounts.
 - [Remote Helper Privacy Policy](https://draculascave.co/software/remote-helper/privacy/): Remote Helper's privacy policy — the app collects nothing, sends nothing to its developer, and keeps everything on your own devices and network.
 - [Remote Helper](https://draculascave.co/software/remote-helper/): Remote Helper turns your iPhone or iPad into a wireless keyboard for your PC or Mac. Everything travels over your own Wi-Fi — no cloud, no accounts, no nonsense.
 
