@@ -12,6 +12,7 @@ Dracula's Cave is the personal site of DiscoDracula — indie games, software an
 - [Newsletter](https://draculascave.co/newsletter-subscribe/): Sign up to the Dracula's Cave newsletter for news about our games and software.
 - [Privacy Policy](https://draculascave.co/privacy/): The Dracula's Cave privacy policy — how we handle data across the website, blog, games and software.
 - [Software](https://draculascave.co/software/): AudioTheory software by Dracula's Cave — Guitars, Piano Keys and Grids: interactive music theory reference tools.
+- [Support](https://draculascave.co/support/): Support for Dracula's Cave apps and software.
 
 ## Games
 
